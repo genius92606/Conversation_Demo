@@ -1,0 +1,13 @@
+﻿  glad.c
+  main.cpp
+d:\demo\libraries\includes\shader_m.h(44): warning C4101: 'e': unreferenced local variable
+d:\demo\libraries\includes\mesh.h(84): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+d:\demo\demo\main.cpp(207): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\demo\demo\main.cpp(347): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\demo\demo\main.cpp(348): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\demo\demo\main.cpp(352): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\demo\demo\main.cpp(353): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\demo\demo\main.cpp(355): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\demo\demo\main.cpp(356): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\demo\demo\main.cpp(365): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Demo.vcxproj -> D:\Demo\x64\Debug\Demo.exe

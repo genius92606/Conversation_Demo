@@ -1,0 +1,77 @@
+# Blender MTL File: 'None'
+# Material Count: 5
+
+newmtl Bodymat.001
+Ns 179.999996
+Ka 0.040000 0.040000 0.040000
+Kd 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump -bm 0.000000 male1_Body_Normal.png
+map_Kd male1_Body_Diffuse.png
+map_Ks male1_Body_Specular.png
+map_Ns male1_Body_Gloss.png
+map_d male1_Body_Opacity.png
+
+newmtl Bottommat.001
+Ns 179.999996
+Ka 0.040000 0.040000 0.040000
+Kd 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump -bm 0.000000 male1_Bottom_Normal.png
+map_Kd male1_Bottom_Diffuse.png
+map_Ks male1_Bottom_Specular.png
+map_Ns male1_Bottom_Gloss.png
+map_d male1_Bottom_Opacity.png
+
+newmtl Hairmat.001
+Ns 179.999996
+Ka 0.040000 0.040000 0.040000
+Kd 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump -bm 0.000000 male1_Hair_Normal.png
+map_Kd male1_Hair_Diffuse.png
+map_Ks male1_Hair_Specular.png
+map_Ns male1_Hair_Gloss.png
+map_d male1_Hair_Opacity.png
+
+newmtl Shoesmat.001
+Ns 179.999996
+Ka 0.040000 0.040000 0.040000
+Kd 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump -bm 0.000000 male1_Shoes_Normal.png
+map_Kd male1_Shoes_Diffuse.png
+map_Ks male1_Shoes_Specular.png
+map_Ns male1_Shoes_Gloss.png
+map_d male1_Shoes_Opacity.png
+
+newmtl Topmat.001
+Ns 179.999996
+Ka 0.040000 0.040000 0.040000
+Kd 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump -bm 0.000000 male1_Top_Normal.png
+map_Kd male1_Top_Diffuse.png
+map_Ks male1_Top_Specular.png
+map_Ns male1_Top_Gloss.png
+map_d male1_Top_Opacity.png

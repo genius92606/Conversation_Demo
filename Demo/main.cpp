@@ -1,0 +1,713 @@
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/string_cast.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+
+//#include <filesystem.h>
+#include <shader.h>
+#include <camera.h>
+//#include <model.h>
+#include <animator.h>
+#include <model_animation.h>
+
+#include <iostream>
+#include <iterator>
+#include <algorithm>
+#include <cassert>
+#include <sstream>
+//#include <queue>
+#define TARGET_FPS 30
+
+
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void processInput(GLFWwindow *window);
+unsigned int loadTexture(const char *path);
+unsigned int loadCubemap(vector<std::string> faces);
+
+// settings
+const unsigned int SCR_WIDTH = 1920;
+const unsigned int SCR_HEIGHT = 1080;
+
+// camera
+Camera camera(glm::vec3(0.868368f, 3.01393f, 3.93507f), glm::vec3(-0.173054f, 0.805921f, -0.566166f),-107.4f,-36.3f);
+
+float lastX = SCR_WIDTH / 2.0f;
+float lastY = SCR_HEIGHT / 2.0f;
+bool firstMouse = true;
+
+// timing
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
+
+glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+
+// Our state
+bool show_demo_window = false;
+bool show_another_window = false;
+ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+using namespace std;
+
+
+void printTree(AssimpNodeData* root)
+{
+	assert(root);
+
+	
+	for (int i = 0; i < root->childrenCount; i++)
+	{
+		printTree(&root->children[i]);
+		cout << root->children[i].name << ",";
+	}
+	cout << endl;
+}
+
+
+void Gui() {
+	// Start the Dear ImGui frame
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
+
+	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+	if (show_demo_window)
+		ImGui::ShowDemoWindow(&show_demo_window);
+
+	// 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
+	{
+		static float f = 0.0f;
+		static int counter = 0;
+
+		ImGui::Begin("Simple Window");                          // Create a window called "Hello, world!" and append into it.
+
+		ImGui::Text("Load different input");               // Display some text (you can use a format strings too)
+		ImGui::Checkbox("Eye direction line", &show_demo_window);      // Edit bools storing our window open/close state
+		ImGui::Checkbox("Eyeball", &show_another_window);
+
+		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+		ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
+		if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+			counter++;
+		ImGui::SameLine();
+		ImGui::Text("counter = %d", counter);
+
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::End();
+	}
+
+	// 3. Show another simple window.
+	if (show_another_window)
+	{
+		ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+		ImGui::Text("Hello from another window!");
+		if (ImGui::Button("Close Me"))
+			show_another_window = false;
+		ImGui::End();
+	}
+
+	//// Rendering
+	ImGui::Render();
+
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+int main()
+{
+
+	// glfw: initialize and configure
+	// ------------------------------
+	glfwInit();
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+#ifdef __APPLE__
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
+
+	// glfw window creation
+	// --------------------
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Three-party conversation", NULL, NULL);
+	if (window == NULL)
+	{
+		std::cout << "Failed to create GLFW window" << std::endl;
+		glfwTerminate();
+		return -1;
+	}
+	glfwMakeContextCurrent(window);
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	// comment if you don't want the cursor movement
+	glfwSetCursorPosCallback(window, mouse_callback);
+	glfwSetScrollCallback(window, scroll_callback);
+
+	
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+	// glad: load all OpenGL function pointers
+	// ---------------------------------------
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
+		std::cout << "Failed to initialize GLAD" << std::endl;
+		return -1;
+	}
+	
+	/// Setup Dear ImGui context
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+	// Setup Dear ImGui style
+	ImGui::StyleColorsDark();
+	//ImGui::StyleColorsClassic();
+
+	// Setup Platform/Renderer backends
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	const char* glsl_version = "#version 130";
+	ImGui_ImplOpenGL3_Init(glsl_version);
+
+	
+
+	 //tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
+	//stbi_set_flip_vertically_on_load(true);
+
+	// configure global opengl state
+	// -----------------------------
+	glEnable(GL_DEPTH_TEST);
+
+	// set up vertex data (and buffer(s)) and configure vertex attributes
+  // ------------------------------------------------------------------
+	float planeVertices[] = {
+		// positions            // normals         // texcoords
+		 10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,  10.0f,  0.0f,
+		-10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
+		-10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f,
+
+		 10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,  10.0f,  0.0f,
+		-10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f,
+		 10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,  10.0f, 10.0f
+	};
+	// plane VAO
+	unsigned int planeVAO, planeVBO;
+	glGenVertexArrays(1, &planeVAO);
+	glGenBuffers(1, &planeVBO);
+	glBindVertexArray(planeVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), planeVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glBindVertexArray(0);
+
+	//// load textures
+ //  // -------------
+	unsigned int floorTexture = loadTexture("../Resources/textures/wood.png");
+
+	Shader floorShader("model_loading.vs", "model_loading.fs");
+	floorShader.use();
+	floorShader.setInt("texture1", 0);
+
+	//// build and compile shaders
+	//// -------------------------
+	Shader ourShader("model_loading.vs", "model_loading.fs");
+	Shader skyboxShader("cubemaps.vs", "cubemaps.fs");
+	Shader person1Shader("anim_model_vs.glsl", "anim_model_fs.glsl");
+	Shader person2Shader("anim_model_vs.glsl", "anim_model_fs.glsl");
+	Shader person3Shader("anim_model_vs.glsl", "anim_model_fs.glsl");
+	// load models
+	// -----------
+
+	Model person1("../Resources/person1/person1.dae"); 
+	Animation person1_animation("../Resources/person1/person1.dae", &person1);
+
+
+	AssimpNodeData root = person1_animation.GetRootNode();
+
+
+	//cout << "printing all assimpnodedata\n";
+	//printTree(&root);
+	
+
+
+	Animator person1_animator(&person1_animation);
+
+	
+	
+
+
+	//Model person2("../Resources/person2/person2.dae");
+	//Animation person2_animation("../Resources/person2/person2.dae", &person2);
+	//Animator person2_animator(&person2_animation);
+
+	//Model person3("../Resources/person3/person3.dae");
+	//Animation person3_animation("../Resources/person3/person3.dae", &person3);
+	//Animator person3_animator(&person3_animation);
+
+	cout << "finish loading all object and animation" << endl;
+
+
+	float skyboxVertices[] = {
+		// positions          
+		-1.0f,  1.0f, -1.0f,
+		-1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+
+		-1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+
+		-1.0f, -1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+
+		-1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f, -1.0f,
+
+		-1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f
+	};
+	// skybox VAO
+	unsigned int skyboxVAO, skyboxVBO;
+	glGenVertexArrays(1, &skyboxVAO);
+	glGenBuffers(1, &skyboxVBO);
+	glBindVertexArray(skyboxVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	// draw in wireframe
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	vector<std::string> faces
+	{
+		"../Resources/skybox/right.jpg",
+		"../Resources/skybox/left.jpg",
+		"../Resources/skybox/top.jpg",
+		"../Resources/skybox/bottom.jpg",
+		"../Resources/skybox/front.jpg",
+		"../Resources/skybox/back.jpg"
+
+	};
+	unsigned int cubemapTexture = loadCubemap(faces);
+
+	// shader configuration
+	// --------------------
+
+	skyboxShader.use();
+	skyboxShader.setInt("skybox", 0);
+
+
+	//std::ifstream file("Head_rotate_1.txt");
+	std::string str;
+	/*
+	float aaa[16] = { 1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1 };
+	glm::mat4 bbb;
+	memcpy(glm::value_ptr(bbb), aaa, sizeof(aaa));
+	cout << "bbb: " << glm::to_string(bbb) << endl;
+	*/
+	/*
+	auto headdd = (&person1_animation)->FindBone("mixamorig_Head");
+
+	while (std::getline(file, str))
+	{
+		float aaa[16]; int aindex = 0;
+		size_t pos = 0; aaa[12] = 0, aaa[13] = 0, aaa[14] = 0, aaa[15] = 1;
+		string token; string delimiter = ",";
+		while (((pos = str.find(delimiter)) != std::string::npos) && aindex < 12) {
+			token = str.substr(0, pos);
+			//std::cout << token << std::endl;
+			aaa[aindex] = stof(str); aindex++;
+			str.erase(0, pos + delimiter.length());
+		}
+		glm::mat4 bbb;
+		memcpy(glm::value_ptr(bbb), aaa, sizeof(aaa));
+		//cout << "bbb: " << glm::to_string(bbb) << endl;
+		headdd->setRotation(bbb);
+	}
+	*/
+
+	vector<Bone*> myBone;
+
+	myBone.push_back((&person1_animation)->FindBone("mixamorig_Hips"));
+	myBone.push_back((&person1_animation)->FindBone("mixamorig_Spine"));
+	myBone.push_back((&person1_animation)->FindBone("mixamorig_Spine1"));
+	myBone.push_back((&person1_animation)->FindBone("mixamorig_Spine2"));
+	myBone.push_back((&person1_animation)->FindBone("mixamorig_Neck"));
+	myBone.push_back((&person1_animation)->FindBone("mixamorig_Head"));
+	myBone.push_back((&person1_animation)->FindBone("mixamorig_LeftShoulder"));
+	myBone.push_back((&person1_animation)->FindBone("mixamorig_LeftArm"));
+	myBone.push_back((&person1_animation)->FindBone("mixamorig_LeftForeArm"));
+	myBone.push_back((&person1_animation)->FindBone("mixamorig_LeftHand"));
+	myBone.push_back((&person1_animation)->FindBone("mixamorig_RightShoulder"));
+	myBone.push_back((&person1_animation)->FindBone("mixamorig_RightArm"));
+	myBone.push_back((&person1_animation)->FindBone("mixamorig_RightForeArm"));
+	myBone.push_back((&person1_animation)->FindBone("mixamorig_RightHand"));
+
+	/*
+	auto spine = (&person1_animation)->FindBone("mixamorig_Spine");
+	auto spine1 = (&person1_animation)->FindBone("mixamorig_Spine1");
+	auto spine2 = (&person1_animation)->FindBone("mixamorig_Spine2");
+	auto neck = (&person1_animation)->FindBone("mixamorig_Neck");
+	auto head = (&person1_animation)->FindBone("mixamorig_Head");
+	auto LeftShoulder = (&person1_animation)->FindBone("mixamorig_LeftShoulder");
+	auto LeftArm = (&person1_animation)->FindBone("mixamorig_LeftArm");
+	auto LeftForeArm = (&person1_animation)->FindBone("mixamorig_LeftForeArm");
+	auto LeftHand = (&person1_animation)->FindBone("mixamorig_LeftHand");
+	*/
+	std::ifstream Anson("Anson.txt");
+
+	while (std::getline(Anson, str))
+	{
+		float x, y, z;
+		size_t pos = 0;
+		string token;
+		string delimiter = " "; pos = str.find(delimiter); token = str.substr(0, pos); str.erase(0, pos + delimiter.length());
+		for (int i = 0; i < 14; i++)
+		{
+			
+			
+			delimiter = "  "; pos = str.find(delimiter); token = str.substr(0, pos); x = stof(str); str.erase(0, pos + delimiter.length());
+			delimiter = "  "; pos = str.find(delimiter); token = str.substr(0, pos); y = stof(str); str.erase(0, pos + delimiter.length());
+			delimiter = " "; pos = str.find(delimiter); token = str.substr(0, pos); z = stof(str); str.erase(0, pos + delimiter.length());
+
+			glm::quat MyQuaternion(glm::vec3(glm::radians(x), glm::radians(-y), glm::radians(-z)));
+			if (myBone[i]->GetBoneName().compare("mixamorig_RightShoulder") == 0)
+				MyQuaternion = glm::quat(glm::vec3(glm::radians(x), glm::radians(-y-15), glm::radians(-z+40)));
+			else if (myBone[i]->GetBoneName().compare("mixamorig_LeftShoulder") == 0)
+				MyQuaternion = glm::quat(glm::vec3(glm::radians(x), glm::radians(-y-15), glm::radians(-z - 40)));
+			glm::mat4 bbb = glm::toMat4(MyQuaternion);
+			/*
+			bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(-1, 0, 0));
+			bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(0, -1, 0));
+			bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 0, -1));*/
+			
+			
+			
+			//cout << "bbb: " << glm::to_string(bbb) << endl;
+			myBone[i]->setRotation(bbb);
+		}
+		
+
+	}
+	
+	// render loop
+	// -----------
+	while (!glfwWindowShouldClose(window))
+	{
+		
+		
+
+		// per-frame time logic
+		// --------------------
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+		//if (currentFrame > 20.0)
+		//	break;
+		// input
+		// -----
+		processInput(window);
+		//animator.UpdateAnimation(deltaTime);
+		person1_animator.UpdateAnimation(deltaTime);
+		//person2_animator.UpdateAnimation(deltaTime);
+		//person3_animator.UpdateAnimation(deltaTime);
+
+		// render
+		// ------
+		glClearColor(0.32157f, 0.32157f, 0.32157f, 0.1f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		
+
+		// draw objects
+		floorShader.use();
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		glm::mat4 view = camera.GetViewMatrix();
+		floorShader.setMat4("projection", projection);
+		floorShader.setMat4("view", view);
+		glm::mat4 model_floor = glm::mat4(1.0f);
+		model_floor = glm::translate(model_floor, glm::vec3(0.0f, 0.0f, 0.5f)); // translate it down so it's at the center of the scene
+		model_floor = glm::scale(model_floor, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
+		floorShader.setMat4("model", model_floor);
+		// floor
+		glBindVertexArray(planeVAO);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, floorTexture);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		float character_scale = 0.5;
+		person1Shader.use();
+
+		// view/projection transformations
+		person1Shader.setMat4("projection", projection);
+		person1Shader.setMat4("view", view);
+
+		
+
+		
+		auto transforms1 = person1_animator.GetPoseTransforms();
+		for (int i = 0; i < transforms1.size(); ++i)
+		{
+			person1Shader.setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms1[i]);
+
+		}
+		
+			
+
+		// render the loaded model
+		glm::mat4 person1_model = glm::mat4(1.0f);
+		person1_model = glm::translate(person1_model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+		person1_model = glm::scale(person1_model, glm::vec3(character_scale));	// it's a bit too big for our scene, so scale it down
+		person1Shader.setMat4("model", person1_model);
+		person1.Draw(person1Shader);
+
+
+	//	//person2Shader.use();
+	//	//person2Shader.setMat4("projection", projection);
+	//	//person2Shader.setMat4("view", view);
+	//	//auto transforms2 = person2_animator.GetPoseTransforms();
+	//	//for (int i = 0; i < transforms2.size(); ++i)
+	//	//	person2Shader.setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms2[i]);
+
+
+	//	//// render the loaded model
+	//	//glm::mat4 person2_model = glm::mat4(1.0f);
+	//	//person2_model = glm::translate(person2_model, glm::vec3(1.0f, 0.0f, 1.732f)); // translate it down so it's at the center of the scene
+	//	//person2_model = glm::rotate(person2_model, glm::radians(-120.0f), glm::vec3(0.0, 1.0, 0.0));
+	//	//person2_model = glm::scale(person2_model, glm::vec3(character_scale));	// it's a bit too big for our scene, so scale it down
+	//	//person2Shader.setMat4("model", person2_model);
+	//	//person2.Draw(person2Shader);
+
+	//	//person3Shader.use();
+	//	//person3Shader.setMat4("projection", projection);
+	//	//person3Shader.setMat4("view", view);
+	//	//auto transforms3 = person3_animator.GetPoseTransforms();
+	//	//for (int i = 0; i < transforms3.size(); ++i)
+	//	//	person3Shader.setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms3[i]);
+
+
+	//	//// render the loaded model
+	//	//glm::mat4 person3_model = glm::mat4(1.0f);
+	//	//person3_model = glm::translate(person3_model, glm::vec3(-1.0f, 0.0f, 1.732f)); // translate it down so it's at the center of the scene
+	//	//person3_model = glm::rotate(person3_model, glm::radians(120.0f), glm::vec3(0.0, 1.0, 0.0));
+	//	//person3_model = glm::scale(person3_model, glm::vec3(character_scale*2));	// it's a bit too big for our scene, so scale it down
+	//	//person3Shader.setMat4("model", person3_model);
+	//	//person3.Draw(person3Shader);
+
+
+		// draw skybox as last
+		glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
+		skyboxShader.use();
+		view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix
+		skyboxShader.setMat4("view", view);
+		skyboxShader.setMat4("projection", projection);
+		// skybox cube
+		glBindVertexArray(skyboxVAO);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
+		glDepthFunc(GL_LESS); // set depth function back to default
+
+
+		//cout <<"position"<< camera.Position[0] <<","<< camera.Position[1] << "," << camera.Position[2]<< endl;
+		//cout << "front" << camera.Front[0] << "," << camera.Front[1] << "," << camera.Front[2] << endl;
+		//cout << "up" << camera.Up[0] << "," << camera.Up[1] << "," << camera.Up[2] << endl;
+		//cout << "yaw" << camera.Yaw<<endl;
+		//cout << "pitch" << camera.Pitch << endl;
+		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+		// -------------------------------------------------------------------------------
+		Gui();
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+		while ((glfwGetTime() - currentFrame) < 1.0 / TARGET_FPS) {
+			// TODO: Put the thread to sleep, yield, or simply do nothing
+		}
+
+	}
+
+	// Cleanup
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
+
+	glfwDestroyWindow(window);
+	// glfw: terminate, clearing all previously allocated GLFW resources.
+	// ------------------------------------------------------------------
+	glfwTerminate();
+	return 0;
+}
+
+// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
+// ---------------------------------------------------------------------------------------------------------
+void processInput(GLFWwindow *window)
+{
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
+
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		camera.ProcessKeyboard(FORWARD, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		camera.ProcessKeyboard(BACKWARD, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		camera.ProcessKeyboard(LEFT, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		camera.ProcessKeyboard(RIGHT, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+		camera.DirectlyUpdateCamera(glm::vec3(0.868368f, 3.01393f, 3.93507f), glm::vec3(-0.173054f, 0.805921f, -0.566166f), -107.4f, -36.3f);
+
+}
+
+// glfw: whenever the window size changed (by OS or user resize) this callback function executes
+// ---------------------------------------------------------------------------------------------
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	// make sure the viewport matches the new window dimensions; note that width and 
+	// height will be significantly larger than specified on retina displays.
+	glViewport(0, 0, width, height);
+}
+
+// glfw: whenever the mouse moves, this callback is called
+// -------------------------------------------------------
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	if (firstMouse)
+	{
+		lastX = xpos;
+		lastY = ypos;
+		firstMouse = false;
+	}
+
+	float xoffset = xpos - lastX;
+	float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+
+	lastX = xpos;
+	lastY = ypos;
+
+	camera.ProcessMouseMovement(xoffset, yoffset);
+}
+
+// glfw: whenever the mouse scroll wheel scrolls, this callback is called
+// ----------------------------------------------------------------------
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	camera.ProcessMouseScroll(yoffset);
+}
+
+
+// utility function for loading a 2D texture from file
+// ---------------------------------------------------
+unsigned int loadTexture(char const * path)
+{
+	unsigned int textureID;
+	glGenTextures(1, &textureID);
+
+	int width, height, nrComponents;
+	unsigned char *data = stbi_load(path, &width, &height, &nrComponents, 0);
+	if (data)
+	{
+		GLenum format;
+		if (nrComponents == 1)
+			format = GL_RED;
+		else if (nrComponents == 3)
+			format = GL_RGB;
+		else if (nrComponents == 4)
+			format = GL_RGBA;
+
+		glBindTexture(GL_TEXTURE_2D, textureID);
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		stbi_image_free(data);
+	}
+	else
+	{
+		std::cout << "Texture failed to load at path: " << path << std::endl;
+		stbi_image_free(data);
+	}
+
+	return textureID;
+}
+
+// loads a cubemap texture from 6 individual texture faces
+// order:
+// +X (right)
+// -X (left)
+// +Y (top)
+// -Y (bottom)
+// +Z (front) 
+// -Z (back)
+// -------------------------------------------------------
+unsigned int loadCubemap(vector<std::string> faces)
+{
+	unsigned int textureID;
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+
+	int width, height, nrChannels;
+	for (unsigned int i = 0; i < faces.size(); i++)
+	{
+		unsigned char *data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
+		if (data)
+		{
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+			stbi_image_free(data);
+		}
+		else
+		{
+			std::cout << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
+			stbi_image_free(data);
+		}
+	}
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+	return textureID;
+}

@@ -56,6 +56,11 @@ bool show_demo_window = false;
 bool show_another_window = false;
 ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
+//axes properties
+glm::vec4 axisXColor(0.0f, 0.0f, 1.0f, 1.0f); //blue
+glm::vec4 axisYColor(0.0f, 1.0f, 0.0f, 1.0f); //green
+glm::vec4 axisZColor(1.0f, 0.0f, 0.0f, 1.0f); //red
+
 using namespace std;
 
 
@@ -229,6 +234,7 @@ int main()
 	Shader person1Shader("anim_model_vs.glsl", "anim_model_fs.glsl");
 	Shader person2Shader("anim_model_vs.glsl", "anim_model_fs.glsl");
 	Shader person3Shader("anim_model_vs.glsl", "anim_model_fs.glsl");
+	Shader normalShader("normal_vs.glsl", "normal_fs.glsl");
 	// load models
 	// -----------
 
@@ -317,6 +323,49 @@ int main()
 	// draw in wireframe
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+
+		// draw in wireframe
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	float lineZ[] =
+	{
+		0.0f,  0.0f, 0.0f,
+		0.0f, 0.0f, 2.0f
+	};
+	float lineX[] =
+	{
+		0.0f,  0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f
+	};
+	float lineY[] =
+	{
+		0.0f,  0.0f, 0.0f,
+		0.0f, 2.0f, 0.0f
+	};
+	unsigned int lineZVAO, lineZVBO;
+	glGenVertexArrays(1, &lineZVAO);
+	glGenBuffers(1, &lineZVBO);
+	glBindVertexArray(lineZVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, lineZVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(lineZ), &lineZ, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	unsigned int lineXVAO, lineXVBO;
+	glGenVertexArrays(1, &lineXVAO);
+	glGenBuffers(1, &lineXVBO);
+	glBindVertexArray(lineXVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, lineXVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(lineX), &lineX, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	unsigned int lineYVAO, lineYVBO;
+	glGenVertexArrays(1, &lineYVAO);
+	glGenBuffers(1, &lineYVBO);
+	glBindVertexArray(lineYVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, lineYVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(lineY), &lineY, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
 	vector<std::string> faces
 	{
 		"../Resources/skybox/right.jpg",
@@ -337,33 +386,35 @@ int main()
 
 
 	//std::ifstream file("Head_rotate_1.txt");
-	std::string str;
-	/*
-	float aaa[16] = { 1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1 };
-	glm::mat4 bbb;
-	memcpy(glm::value_ptr(bbb), aaa, sizeof(aaa));
-	cout << "bbb: " << glm::to_string(bbb) << endl;
-	*/
-	/*
-	auto headdd = (&person1_animation)->FindBone("mixamorig_Head");
+	//std::string str;
+	//
+	//float aaa[16] = { 1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1 };
+	//glm::mat4 bbb;
+	//memcpy(glm::value_ptr(bbb), aaa, sizeof(aaa));
+	//cout << "bbb: " << glm::to_string(bbb) << endl;
+	//
+	//
+	//auto headdd = (&person1_animation)->FindBone("mixamorig_Head");
 
-	while (std::getline(file, str))
-	{
-		float aaa[16]; int aindex = 0;
-		size_t pos = 0; aaa[12] = 0, aaa[13] = 0, aaa[14] = 0, aaa[15] = 1;
-		string token; string delimiter = ",";
-		while (((pos = str.find(delimiter)) != std::string::npos) && aindex < 12) {
-			token = str.substr(0, pos);
-			//std::cout << token << std::endl;
-			aaa[aindex] = stof(str); aindex++;
-			str.erase(0, pos + delimiter.length());
-		}
-		glm::mat4 bbb;
-		memcpy(glm::value_ptr(bbb), aaa, sizeof(aaa));
-		//cout << "bbb: " << glm::to_string(bbb) << endl;
-		headdd->setRotation(bbb);
-	}
-	*/
+	//while (std::getline(file, str))
+	//{
+	//	float aaa[16]; int aindex = 0;
+	//	size_t pos = 0; aaa[12] = 0, aaa[13] = 0, aaa[14] = 0, aaa[15] = 1;
+	//	string token; string delimiter = ",";
+	//	while (((pos = str.find(delimiter)) != std::string::npos) && aindex < 12) {
+	//		token = str.substr(0, pos);
+	//		//std::cout << token << std::endl;
+	//		aaa[aindex] = stof(str); aindex++;
+	//		str.erase(0, pos + delimiter.length());
+	//	}
+	//	glm::mat4 bbb;
+	//	memcpy(glm::value_ptr(bbb), aaa, sizeof(aaa));
+	//	//cout << "bbb: " << glm::to_string(bbb) << endl;
+	//	headdd->setRotation(bbb);
+	//}
+	//
+
+
 
 	vector<Bone*> myBone;
 
@@ -382,19 +433,12 @@ int main()
 	myBone.push_back((&person1_animation)->FindBone("mixamorig_RightForeArm"));
 	myBone.push_back((&person1_animation)->FindBone("mixamorig_RightHand"));
 
-	/*
-	auto spine = (&person1_animation)->FindBone("mixamorig_Spine");
-	auto spine1 = (&person1_animation)->FindBone("mixamorig_Spine1");
-	auto spine2 = (&person1_animation)->FindBone("mixamorig_Spine2");
-	auto neck = (&person1_animation)->FindBone("mixamorig_Neck");
-	auto head = (&person1_animation)->FindBone("mixamorig_Head");
-	auto LeftShoulder = (&person1_animation)->FindBone("mixamorig_LeftShoulder");
-	auto LeftArm = (&person1_animation)->FindBone("mixamorig_LeftArm");
-	auto LeftForeArm = (&person1_animation)->FindBone("mixamorig_LeftForeArm");
-	auto LeftHand = (&person1_animation)->FindBone("mixamorig_LeftHand");
-	*/
-	std::ifstream Anson("Anson.txt");
 
+	for (int i = 0; i < myBone.size(); i++)
+		cout << myBone[i]->GetBoneName() << endl;
+	std::ifstream Anson("Anson.txt");
+	std::string str;
+	int showing = 0;
 	while (std::getline(Anson, str))
 	{
 		float x, y, z;
@@ -404,21 +448,51 @@ int main()
 		for (int i = 0; i < 14; i++)
 		{
 			
-			
+
 			delimiter = "  "; pos = str.find(delimiter); token = str.substr(0, pos); x = stof(str); str.erase(0, pos + delimiter.length());
 			delimiter = "  "; pos = str.find(delimiter); token = str.substr(0, pos); y = stof(str); str.erase(0, pos + delimiter.length());
 			delimiter = " "; pos = str.find(delimiter); token = str.substr(0, pos); z = stof(str); str.erase(0, pos + delimiter.length());
 
+			if (showing < 1000)
+			{
+				if (i == 7)
+				{
+					cout << "left arm rotation: " << x << "," << y << "," << z << endl;
+					showing++;
+
+				}
+				if (i == 11)
+				{
+					cout << "Right arm rotation: " << x << "," << y << "," << z << endl;
+					showing++;
+				}
+					
+				
+			}
+			
+				
+			/*
 			glm::quat MyQuaternion(glm::vec3(glm::radians(x), glm::radians(-y), glm::radians(-z)));
 			if (myBone[i]->GetBoneName().compare("mixamorig_RightShoulder") == 0)
 				MyQuaternion = glm::quat(glm::vec3(glm::radians(x), glm::radians(-y-15), glm::radians(-z+40)));
 			else if (myBone[i]->GetBoneName().compare("mixamorig_LeftShoulder") == 0)
 				MyQuaternion = glm::quat(glm::vec3(glm::radians(x), glm::radians(-y-15), glm::radians(-z - 40)));
 			glm::mat4 bbb = glm::toMat4(MyQuaternion);
-			/*
-			bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(-1, 0, 0));
-			bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(0, -1, 0));
-			bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 0, -1));*/
+
+			*/
+			glm::mat4 bbb; bbb = glm::mat4(1.0f);
+
+
+
+			/* roll, pitch, yaw
+			bbb = glm::rotate(bbb, -glm::radians(x), glm::vec3(0, 0, 1));
+			bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
+			bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
+			*/
+			//normal x,y,z
+			bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(1, 0, 0));
+			bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(0, 1, 0));
+			bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 0, 1));
 			
 			
 			
@@ -428,7 +502,7 @@ int main()
 		
 
 	}
-	
+
 	// render loop
 	// -----------
 	while (!glfwWindowShouldClose(window))
@@ -473,6 +547,30 @@ int main()
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, floorTexture);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		//draw axes
+		normalShader.use();
+		normalShader.setMat4("projection", projection);
+		normalShader.setMat4("view", view);
+		glLineWidth(4);
+
+		glm::mat4 model_axis = glm::mat4(1.0f);
+
+
+		model_axis = glm::scale(model_axis, glm::vec3(1.0f, 1.0f, 1.0f));
+		normalShader.setMat4("model", model_axis);
+
+		normalShader.setVec4("color", axisZColor); //red
+		glBindVertexArray(lineZVAO);
+		glDrawArrays(GL_LINES, 0, 2);
+		normalShader.setVec4("color", axisXColor); //blue
+		glBindVertexArray(lineXVAO);
+		glDrawArrays(GL_LINES, 0, 2);
+		normalShader.setVec4("color", axisYColor); //green
+		glBindVertexArray(lineYVAO);
+		glDrawArrays(GL_LINES, 0, 2);
+
+
 
 		float character_scale = 0.5;
 		person1Shader.use();

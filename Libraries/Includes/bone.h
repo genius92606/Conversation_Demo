@@ -7,6 +7,7 @@
 #include <assimp/scene.h>
 #include <list>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 #include <assimp_glm_helpers.h>
@@ -94,6 +95,35 @@ public:
 		glm::mat4 rotation = rotate;
 		glm::mat4 scale = InterpolateScaling(animationTime);
 		m_LocalTransform = translation * rotation * scale;
+	}
+	void Update_fromFile_with_tune(glm::mat4 rotate)
+	{
+		glm::mat4 translation = glm::translate(glm::mat4(1.0f), m_Positions[0].position);
+		glm::mat4 rotation = file_Rotations.front(); file_Rotations.pop();
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), m_Scales[0].scale);
+		m_LocalTransform = translation * rotation * rotate * scale;
+	}
+	void Update_fromFile_left_arms()
+	{
+		glm::mat4 arms(1.0f);
+		arms = glm::rotate(arms, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+
+		auto arms_inverse = glm::inverse(arms);
+		glm::mat4 translation = glm::translate(glm::mat4(1.0f), m_Positions[0].position);
+		glm::mat4 rotation = file_Rotations.front(); file_Rotations.pop();
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), m_Scales[0].scale);
+		m_LocalTransform = translation * arms_inverse* rotation *arms * scale;
+	}
+	void Update_fromFile_right_arms()
+	{
+		glm::mat4 arms(1.0f);
+		arms = glm::rotate(arms, glm::radians(-90.0f), glm::vec3(0.0, 0.0, 1.0));
+
+		auto arms_inverse = glm::inverse(arms);
+		glm::mat4 translation = glm::translate(glm::mat4(1.0f), m_Positions[0].position);
+		glm::mat4 rotation = file_Rotations.front(); file_Rotations.pop();
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), m_Scales[0].scale);
+		m_LocalTransform = translation * arms_inverse* rotation *arms * scale;
 	}
 	void Update_without_rotation(float animationTime) {
 		glm::mat4 translation = glm::translate(glm::mat4(1.0f), m_Positions[0].position);

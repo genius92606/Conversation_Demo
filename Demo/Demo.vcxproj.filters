@@ -71,6 +71,12 @@
     <None Include="anim_model_fs.glsl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="normal_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="normal_vs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Libraries\Includes\camera.h">

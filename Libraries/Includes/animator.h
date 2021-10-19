@@ -49,7 +49,7 @@ public:
 		{
 
 				
-			if (nodeName.compare("mixamorig_Head") == 0) 
+			if (nodeName.compare("mixamorig_Head") == 0 || nodeName.compare("Head") == 0)
 				//Bone->Update(m_CurrentTime);
 				Bone->Update_fromFile();
 			//else if (nodeName.compare("mixamorig_Hips") == 0)

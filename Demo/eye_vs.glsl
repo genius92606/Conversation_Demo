@@ -6,8 +6,8 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 uniform mat4 headMatrix;
-
+uniform mat4 eye_angle;
 void main()
 {
-	gl_Position = projection * view * model * headMatrix*vec4(aPos, 1.0);
+	gl_Position = projection * view * model * headMatrix * eye_angle * vec4(aPos, 1.0);
 }

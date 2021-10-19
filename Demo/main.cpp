@@ -71,19 +71,6 @@ float eye_height = 1.310;
 using namespace std;
 
 
-void printTree(AssimpNodeData* root)
-{
-	assert(root);
-
-	
-	for (int i = 0; i < root->childrenCount; i++)
-	{
-		printTree(&root->children[i]);
-		cout << root->children[i].name << ",";
-	}
-	cout << endl;
-}
-
 
 void Gui() {
 	// Start the Dear ImGui frame
@@ -246,31 +233,23 @@ int main()
 	// load models
 	// -----------
 
-	Model person1("../Resources/person1/person1.dae"); 
-	Animation person1_animation("../Resources/person1/person1.dae", &person1);
-
-
-	AssimpNodeData root = person1_animation.GetRootNode();
-
-
-	//cout << "printing all assimpnodedata\n";
-	//printTree(&root);
-	
-
-
-	Animator person1_animator(&person1_animation);
-
-	
-	
-
+	//Model person1("../Resources/person1/person1.dae"); 
+	//Animation person1_animation("../Resources/person1/person1.dae", &person1);
+	//Animator person1_animator(&person1_animation);
 
 	//Model person2("../Resources/person2/person2.dae");
 	//Animation person2_animation("../Resources/person2/person2.dae", &person2);
 	//Animator person2_animator(&person2_animation);
+	Model person1("../Resources/male3/male3.dae"); 
+	Animation person1_animation("../Resources/male3/male3.dae", &person1);
+	Animator person1_animator(&person1_animation);
 
-	//Model person3("../Resources/person3/person3.dae");
-	//Animation person3_animation("../Resources/person3/person3.dae", &person3);
-	//Animator person3_animator(&person3_animation);
+	Model person2("../Resources/male3/male3.dae");
+	Animation person2_animation("../Resources/male3/male3.dae", &person2);
+	Animator person2_animator(&person2_animation);
+	Model person3("../Resources/male3/male3.dae");
+	Animation person3_animation("../Resources/male3/male3.dae", &person3);
+	Animator person3_animator(&person3_animation);
 
 	cout << "finish loading all object and animation" << endl;
 
@@ -393,8 +372,7 @@ int main()
 	skyboxShader.setInt("skybox", 0);
 
 
-	std::ifstream file("Head_rotate_1.txt");
-	std::string str;
+
 	
 	/*float aaa[16] = { 1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1 };
 	glm::mat4 bbb;
@@ -402,52 +380,91 @@ int main()
 	cout << "bbb: " << glm::to_string(bbb) << endl;
 	*/
 
-	auto headdd = (&person1_animation)->FindBone("mixamorig_Head");
+	//auto head1 = (&person1_animation)->FindBone("mixamorig_Head");
+	auto head1 = (&person1_animation)->FindBone("Head");
+	auto head2 = (&person2_animation)->FindBone("Head");
+	auto head3 = (&person3_animation)->FindBone("Head");
+	for (int i = 0; i < (&person3_animation)->getBones().size(); i++)
+		cout << (&person3_animation)->getBones()[i].GetBoneName() << endl;
 
-	while (std::getline(file, str))
+	queue<eye_angle> eye1;
+	queue<eye_angle> eye2;
+	queue<eye_angle> eye3;
+	std::ifstream file;
+	for (int i = 0; i < 3; i++)
 	{
-		float aaa[16]; int aindex = 0;
-		size_t pos = 0; aaa[12] = 0, aaa[13] = 0, aaa[14] = 0, aaa[15] = 1;
-		string token; string delimiter = ",";
-		while (((pos = str.find(delimiter)) != std::string::npos) && aindex < 12) {
-			token = str.substr(0, pos);
-			//std::cout << token << std::endl;
-			aaa[aindex] = stof(str); aindex++;
-			str.erase(0, pos + delimiter.length());
+		if(i==0)
+			file = std::ifstream("Head_rotate_1.txt");
+		else if(i==1)
+			file = std::ifstream("Head_rotate_2.txt");
+		else
+			file = std::ifstream("Head_rotate_3.txt");
+
+		
+		std::string str;
+		while (std::getline(file, str))
+		{
+			float aaa[16]; int aindex = 0;
+			size_t pos = 0; aaa[12] = 0, aaa[13] = 0, aaa[14] = 0, aaa[15] = 1;
+			string token; string delimiter = ",";
+			while (((pos = str.find(delimiter)) != std::string::npos) && aindex < 12) {
+				token = str.substr(0, pos);
+				//std::cout << token << std::endl;
+				aaa[aindex] = stof(str); aindex++;
+				str.erase(0, pos + delimiter.length());
+			}
+			glm::mat4 bbb;
+			memcpy(glm::value_ptr(bbb), aaa, sizeof(aaa));
+			//cout << "bbb: " << glm::to_string(bbb) << endl;
+			if (i == 0)
+				head1->setRotation(bbb);
+			else if (i == 1)
+			{
+				head2->setRotation(bbb);
+			}
+			else
+			{
+				head3->setRotation(bbb);
+
+			}
+				
+			
 		}
-		glm::mat4 bbb;
-		memcpy(glm::value_ptr(bbb), aaa, sizeof(aaa));
-		//cout << "bbb: " << glm::to_string(bbb) << endl;
-		headdd->setRotation(bbb);
-	}
-	
-	vector<eye_angle> eye;
-	std::ifstream eye1("head_eye_angle1.txt");
-	std::string strrr;
-	int showing = 0;
-	while (std::getline(eye1, strrr))
-	{
-		float x, y;
-		size_t pos = 0;
-		string token;
-		string delimiter = ","; pos = strrr.find(delimiter); token = strrr.substr(0, pos); strrr.erase(0, pos + delimiter.length());
-		pos = strrr.find(delimiter); token = strrr.substr(0, pos); strrr.erase(0, pos + delimiter.length());
-		pos = strrr.find(delimiter); token = strrr.substr(0, pos); strrr.erase(0, pos + delimiter.length());
-		pos = strrr.find(delimiter); token = strrr.substr(0, pos); x = stof(strrr); strrr.erase(0, pos + delimiter.length());
-		pos = strrr.find(delimiter); token = strrr.substr(0, pos); y = stof(strrr); strrr.erase(0, pos + delimiter.length());
-		eye_angle a; a.x = x; a.y = y;
-		eye.push_back(a);
+
+		if (i == 0)
+			file = std::ifstream("head_eye_angle1.txt");
+		else if (i == 1)
+			file = std::ifstream("head_eye_angle2.txt");
+		else
+			file = std::ifstream("head_eye_angle3.txt");
+
+
+		while (std::getline(file, str))
+		{
+			float x, y;
+			size_t pos = 0;
+			string token;
+			string delimiter = ","; pos = str.find(delimiter); token = str.substr(0, pos); str.erase(0, pos + delimiter.length());
+			pos = str.find(delimiter); token = str.substr(0, pos); str.erase(0, pos + delimiter.length());
+			pos = str.find(delimiter); token = str.substr(0, pos); str.erase(0, pos + delimiter.length());
+			pos = str.find(delimiter); token = str.substr(0, pos); x = stof(str); str.erase(0, pos + delimiter.length());
+			pos = str.find(delimiter); token = str.substr(0, pos); y = stof(str); str.erase(0, pos + delimiter.length());
+			eye_angle a; a.x = x; a.y = y;
+			if (i == 0)
+				eye1.push(a);
+			else if (i == 1)
+				eye2.push(a);
+			else
+				eye3.push(a);
+			
+
+		}
 
 	}
 
-	auto bones = (&person1_animation)->getBones();
-	for (int i = 0; i < bones.size(); i++) {
-		cout << bones[i].GetBoneName() << ": " << bones[i].GetBoneID() << endl;
-	}
+	//cout << "head2 stuff: " << glm::to_string(head2->get_current_rotation()) << endl;
+	//cout << "head3: " << glm::to_string(head3->get_current_rotation()) << endl;
 
-	auto bone_info = (&person1_animation)->GetBoneIDMap();
-	int head_ID = bone_info["mixamorig_Head"].id;
-	cout << "Head ID in bone info: " << head_ID << endl;
 
 
 	//vector<Bone*> myBone;
@@ -529,10 +546,10 @@ int main()
 		// input
 		// -----
 		processInput(window);
-		//animator.UpdateAnimation(deltaTime);
+
 		person1_animator.UpdateAnimation(deltaTime);
-		//person2_animator.UpdateAnimation(deltaTime);
-		//person3_animator.UpdateAnimation(deltaTime);
+		person2_animator.UpdateAnimation(deltaTime);
+		person3_animator.UpdateAnimation(deltaTime);
 
 		// render
 		// ------
@@ -566,7 +583,7 @@ int main()
 		glm::mat4 model_axis = glm::mat4(1.0f);
 
 
-		//model_axis = glm::scale(model_axis, glm::vec3(1.0f, 1.0f, 1.0f));
+		model_axis = glm::scale(model_axis, glm::vec3(0.5f, 0.5f, 0.5f));
 		normalShader.setMat4("model", model_axis);
 
 		normalShader.setVec4("color", axisZColor); //red
@@ -587,10 +604,6 @@ int main()
 		// view/projection transformations
 		person1Shader.setMat4("projection", projection);
 		person1Shader.setMat4("view", view);
-
-		
-
-		
 		auto transforms1 = person1_animator.GetPoseTransforms();
 		for (int i = 0; i < transforms1.size(); ++i)
 		{
@@ -598,62 +611,98 @@ int main()
 
 		}
 		
-			
-
 		// render the loaded model
 		glm::mat4 person1_model = glm::mat4(1.0f);
 		person1_model = glm::translate(person1_model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-		person1_model = glm::scale(person1_model, glm::vec3(character_scale));	// it's a bit too big for our scene, so scale it down
+		person1_model = glm::scale(person1_model, glm::vec3(character_scale*2));	// it's a bit too big for our scene, so scale it down
 		person1Shader.setMat4("model", person1_model);
 		person1.Draw(person1Shader);
 
 
-		////draw eye line for person 1
+		person2Shader.use();
+		person2Shader.setMat4("projection", projection);
+		person2Shader.setMat4("view", view);
+		auto transforms2 = person2_animator.GetPoseTransforms();
+		for (int i = 0; i < transforms2.size(); ++i)
+			person2Shader.setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms2[i]);
+
+
+		// render the loaded model
+		glm::mat4 person2_model = glm::mat4(1.0f);
+		person2_model = glm::translate(person2_model, glm::vec3(1.0f, 0.0f, 1.732f)); // translate it down so it's at the center of the scene
+		person2_model = glm::rotate(person2_model, glm::radians(-120.0f), glm::vec3(0.0, 1.0, 0.0));
+		person2_model = glm::scale(person2_model, glm::vec3(character_scale*2));	// it's a bit too big for our scene, so scale it down
+		person2Shader.setMat4("model", person2_model);
+		person2.Draw(person2Shader);
+
+		person3Shader.use();
+		person3Shader.setMat4("projection", projection);
+		person3Shader.setMat4("view", view);
+		auto transforms3 = person3_animator.GetPoseTransforms();
+		for (int i = 0; i < transforms3.size(); ++i)
+			person3Shader.setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms3[i]);
+
+
+		// render the loaded model
+		glm::mat4 person3_model = glm::mat4(1.0f);
+		person3_model = glm::translate(person3_model, glm::vec3(-1.0f, 0.0f, 1.732f)); // translate it down so it's at the center of the scene
+		person3_model = glm::rotate(person3_model, glm::radians(120.0f), glm::vec3(0.0, 1.0, 0.0));
+		person3_model = glm::scale(person3_model, glm::vec3(character_scale*2));	// it's a bit too big for our scene, so scale it down
+		person3Shader.setMat4("model", person3_model);
+		person3.Draw(person3Shader);
+
+
+		////draw eye line
 		eyeShader.use();
 		eyeShader.setMat4("projection", projection);
 		eyeShader.setMat4("view", view);
 		glLineWidth(5);
+
+		glm::mat4 eyeAngle = glm::mat4(1.0f);
+		eye_angle temp = eye1.front(); eye1.pop();
+		eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.x), glm::vec3(0.0f, 1.0f, 0.0f));
+		eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.y), glm::vec3(1.0f, 0.0f, 0.0f));
+
 		glm::mat4 model_eye_angle = glm::mat4(1.0f);
 		model_eye_angle = glm::translate(model_eye_angle, glm::vec3(0.0f, eye_height, 0.0f));
-		model_eye_angle = glm::scale(model_eye_angle, glm::vec3(character_scale));
-		eyeShader.setMat4("headMatrix", headdd->get_current_rotation());
+		model_eye_angle = glm::scale(model_eye_angle, glm::vec3(character_scale * 2));
+		eyeShader.setMat4("eye_angle", eyeAngle);
+		eyeShader.setMat4("headMatrix", head1->get_current_rotation());
 		eyeShader.setMat4("model", model_eye_angle);
 		eyeShader.setVec4("color", axisZColor); //red
 		glBindVertexArray(lineZVAO);
 		glDrawArrays(GL_LINES, 0, 2);
 
-	//	//person2Shader.use();
-	//	//person2Shader.setMat4("projection", projection);
-	//	//person2Shader.setMat4("view", view);
-	//	//auto transforms2 = person2_animator.GetPoseTransforms();
-	//	//for (int i = 0; i < transforms2.size(); ++i)
-	//	//	person2Shader.setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms2[i]);
+		eyeAngle = glm::mat4(1.0f);
+		temp = eye2.front(); eye2.pop();
+		eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.x), glm::vec3(0.0f, 1.0f, 0.0f));
+		eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.y), glm::vec3(1.0f, 0.0f, 0.0f));
+		model_eye_angle = glm::mat4(1.0f);
+		model_eye_angle = glm::translate(model_eye_angle, glm::vec3(1.0f, eye_height, 1.732f));
+		model_eye_angle = glm::rotate(model_eye_angle, glm::radians(-120.0f), glm::vec3(0.0, 1.0, 0.0));
+		model_eye_angle = glm::scale(model_eye_angle, glm::vec3(character_scale * 2));
+		eyeShader.setMat4("eye_angle", eyeAngle);
+		eyeShader.setMat4("headMatrix", head2->get_current_rotation());
+		eyeShader.setMat4("model", model_eye_angle);
+		eyeShader.setVec4("color", axisZColor); //red
+		glBindVertexArray(lineZVAO);
+		glDrawArrays(GL_LINES, 0, 2);
 
+		eyeAngle = glm::mat4(1.0f);
+		temp = eye3.front(); eye3.pop();
+		eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.x), glm::vec3(0.0f, 1.0f, 0.0f));
+		eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.y), glm::vec3(1.0f, 0.0f, 0.0f));
 
-	//	//// render the loaded model
-	//	//glm::mat4 person2_model = glm::mat4(1.0f);
-	//	//person2_model = glm::translate(person2_model, glm::vec3(1.0f, 0.0f, 1.732f)); // translate it down so it's at the center of the scene
-	//	//person2_model = glm::rotate(person2_model, glm::radians(-120.0f), glm::vec3(0.0, 1.0, 0.0));
-	//	//person2_model = glm::scale(person2_model, glm::vec3(character_scale));	// it's a bit too big for our scene, so scale it down
-	//	//person2Shader.setMat4("model", person2_model);
-	//	//person2.Draw(person2Shader);
-
-	//	//person3Shader.use();
-	//	//person3Shader.setMat4("projection", projection);
-	//	//person3Shader.setMat4("view", view);
-	//	//auto transforms3 = person3_animator.GetPoseTransforms();
-	//	//for (int i = 0; i < transforms3.size(); ++i)
-	//	//	person3Shader.setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms3[i]);
-
-
-	//	//// render the loaded model
-	//	//glm::mat4 person3_model = glm::mat4(1.0f);
-	//	//person3_model = glm::translate(person3_model, glm::vec3(-1.0f, 0.0f, 1.732f)); // translate it down so it's at the center of the scene
-	//	//person3_model = glm::rotate(person3_model, glm::radians(120.0f), glm::vec3(0.0, 1.0, 0.0));
-	//	//person3_model = glm::scale(person3_model, glm::vec3(character_scale*2));	// it's a bit too big for our scene, so scale it down
-	//	//person3Shader.setMat4("model", person3_model);
-	//	//person3.Draw(person3Shader);
-
+		model_eye_angle = glm::mat4(1.0f);
+		model_eye_angle = glm::translate(model_eye_angle, glm::vec3(-1.0f, eye_height, 1.732f));
+		model_eye_angle = glm::rotate(model_eye_angle, glm::radians(120.0f), glm::vec3(0.0, 1.0, 0.0));
+		model_eye_angle = glm::scale(model_eye_angle, glm::vec3(character_scale * 2));
+		eyeShader.setMat4("eye_angle", eyeAngle);
+		eyeShader.setMat4("headMatrix", head3->get_current_rotation());
+		eyeShader.setMat4("model", model_eye_angle);
+		eyeShader.setVec4("color", axisZColor); //red
+		glBindVertexArray(lineZVAO);
+		glDrawArrays(GL_LINES, 0, 2);
 
 		// draw skybox as last
 		glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content

@@ -179,6 +179,9 @@ public:
 	void setRotation(glm::mat4 rot) {
 		file_Rotations.push(rot);
 	}
+	glm::mat4 get_current_rotation() {
+		return file_Rotations.front();
+	}
 
 private:
 

@@ -66,7 +66,7 @@ struct eye_angle {
 	float x;
 	float y;
 };
-
+float eye_height = 1.310;
 
 using namespace std;
 
@@ -108,7 +108,7 @@ void Gui() {
 
 		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
 		ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
+		ImGui::SliderFloat("eye height", &eye_height, 0.0f, 10.0f);
 		if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
 			counter++;
 		ImGui::SameLine();
@@ -164,7 +164,7 @@ int main()
 	glfwSetScrollCallback(window, scroll_callback);
 
 	
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
@@ -242,6 +242,7 @@ int main()
 	Shader person2Shader("anim_model_vs.glsl", "anim_model_fs.glsl");
 	Shader person3Shader("anim_model_vs.glsl", "anim_model_fs.glsl");
 	Shader normalShader("normal_vs.glsl", "normal_fs.glsl");
+	Shader eyeShader("eye_vs.glsl", "normal_fs.glsl");
 	// load models
 	// -----------
 
@@ -336,7 +337,7 @@ int main()
 	float lineZ[] =
 	{
 		0.0f,  0.0f, 0.0f,
-		0.0f, 0.0f, 2.0f
+		0.0f, 0.0f, 1.0f
 	};
 	float lineX[] =
 	{
@@ -346,7 +347,7 @@ int main()
 	float lineY[] =
 	{
 		0.0f,  0.0f, 0.0f,
-		0.0f, 2.0f, 0.0f
+		0.0f, 1.0f, 0.0f
 	};
 	unsigned int lineZVAO, lineZVBO;
 	glGenVertexArrays(1, &lineZVAO);
@@ -395,12 +396,12 @@ int main()
 	std::ifstream file("Head_rotate_1.txt");
 	std::string str;
 	
-	float aaa[16] = { 1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1 };
+	/*float aaa[16] = { 1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1 };
 	glm::mat4 bbb;
 	memcpy(glm::value_ptr(bbb), aaa, sizeof(aaa));
 	cout << "bbb: " << glm::to_string(bbb) << endl;
-	
-	
+	*/
+
 	auto headdd = (&person1_animation)->FindBone("mixamorig_Head");
 
 	while (std::getline(file, str))
@@ -438,6 +439,16 @@ int main()
 		eye.push_back(a);
 
 	}
+
+	auto bones = (&person1_animation)->getBones();
+	for (int i = 0; i < bones.size(); i++) {
+		cout << bones[i].GetBoneName() << ": " << bones[i].GetBoneID() << endl;
+	}
+
+	auto bone_info = (&person1_animation)->GetBoneIDMap();
+	int head_ID = bone_info["mixamorig_Head"].id;
+	cout << "Head ID in bone info: " << head_ID << endl;
+
 
 	//vector<Bone*> myBone;
 
@@ -555,7 +566,7 @@ int main()
 		glm::mat4 model_axis = glm::mat4(1.0f);
 
 
-		model_axis = glm::scale(model_axis, glm::vec3(1.0f, 1.0f, 1.0f));
+		//model_axis = glm::scale(model_axis, glm::vec3(1.0f, 1.0f, 1.0f));
 		normalShader.setMat4("model", model_axis);
 
 		normalShader.setVec4("color", axisZColor); //red
@@ -568,10 +579,7 @@ int main()
 		glBindVertexArray(lineYVAO);
 		glDrawArrays(GL_LINES, 0, 2);
 
-		////draw line in front of eye
-		//glm::mat4 model_eye_angle = glm::mat4(1.0f);
-		//model_eye_angle = glm::translate(model_eye_angle, glm::vec3(0.0f, 0.0f, 0.5f));
-		//model_eye_angle= glm::scale(model_eye_angle, glm::vec3(1.0f, 1.0f, 1.0f));
+		
 
 		float character_scale = 0.5;
 		person1Shader.use();
@@ -599,6 +607,20 @@ int main()
 		person1Shader.setMat4("model", person1_model);
 		person1.Draw(person1Shader);
 
+
+		////draw eye line for person 1
+		eyeShader.use();
+		eyeShader.setMat4("projection", projection);
+		eyeShader.setMat4("view", view);
+		glLineWidth(5);
+		glm::mat4 model_eye_angle = glm::mat4(1.0f);
+		model_eye_angle = glm::translate(model_eye_angle, glm::vec3(0.0f, eye_height, 0.0f));
+		model_eye_angle = glm::scale(model_eye_angle, glm::vec3(character_scale));
+		eyeShader.setMat4("headMatrix", headdd->get_current_rotation());
+		eyeShader.setMat4("model", model_eye_angle);
+		eyeShader.setVec4("color", axisZColor); //red
+		glBindVertexArray(lineZVAO);
+		glDrawArrays(GL_LINES, 0, 2);
 
 	//	//person2Shader.use();
 	//	//person2Shader.setMat4("projection", projection);

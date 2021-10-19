@@ -151,6 +151,7 @@
     <None Include="anim_model_vs.glsl" />
     <None Include="cubemaps.fs" />
     <None Include="cubemaps.vs" />
+    <None Include="eye_vs.glsl" />
     <None Include="materials.fs" />
     <None Include="materials.vs" />
     <None Include="model_loading.fs" />

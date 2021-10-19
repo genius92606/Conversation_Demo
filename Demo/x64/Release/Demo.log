@@ -9,17 +9,17 @@ d:\demo\libraries\includes\animation.h(31): warning C4244: '=': conversion from 
 d:\demo\libraries\includes\animation.h(32): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
 d:\demo\libraries\includes\animation.h(56): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
 d:\demo\libraries\includes\animation.h(99): warning C4018: '<': signed/unsigned mismatch
-d:\demo\demo\main.cpp(515): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\demo\demo\main.cpp(713): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\demo\demo\main.cpp(714): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\demo\demo\main.cpp(718): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\demo\demo\main.cpp(719): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\demo\demo\main.cpp(721): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\demo\demo\main.cpp(722): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\demo\demo\main.cpp(731): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\demo\demo\main.cpp(509): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\demo\demo\main.cpp(707): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\demo\demo\main.cpp(708): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\demo\demo\main.cpp(712): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\demo\demo\main.cpp(713): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\demo\demo\main.cpp(715): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\demo\demo\main.cpp(716): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\demo\demo\main.cpp(725): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   Generating code
-  3 of 3764 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    7 functions had inline decision re-evaluated but remain unchanged
+  86 of 3698 functions ( 2.3%) were compiled, the rest were copied from previous compilation.
+    8 functions were new in current compilation
+    172 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Demo.vcxproj -> D:\Demo\x64\Release\Demo.exe

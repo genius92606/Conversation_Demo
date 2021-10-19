@@ -61,6 +61,13 @@ glm::vec4 axisXColor(0.0f, 0.0f, 1.0f, 1.0f); //blue
 glm::vec4 axisYColor(0.0f, 1.0f, 0.0f, 1.0f); //green
 glm::vec4 axisZColor(1.0f, 0.0f, 0.0f, 1.0f); //red
 
+//eye properties
+struct eye_angle {
+	float x;
+	float y;
+};
+
+
 using namespace std;
 
 
@@ -385,123 +392,114 @@ int main()
 	skyboxShader.setInt("skybox", 0);
 
 
-	//std::ifstream file("Head_rotate_1.txt");
-	//std::string str;
-	//
-	//float aaa[16] = { 1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1 };
-	//glm::mat4 bbb;
-	//memcpy(glm::value_ptr(bbb), aaa, sizeof(aaa));
-	//cout << "bbb: " << glm::to_string(bbb) << endl;
-	//
-	//
-	//auto headdd = (&person1_animation)->FindBone("mixamorig_Head");
-
-	//while (std::getline(file, str))
-	//{
-	//	float aaa[16]; int aindex = 0;
-	//	size_t pos = 0; aaa[12] = 0, aaa[13] = 0, aaa[14] = 0, aaa[15] = 1;
-	//	string token; string delimiter = ",";
-	//	while (((pos = str.find(delimiter)) != std::string::npos) && aindex < 12) {
-	//		token = str.substr(0, pos);
-	//		//std::cout << token << std::endl;
-	//		aaa[aindex] = stof(str); aindex++;
-	//		str.erase(0, pos + delimiter.length());
-	//	}
-	//	glm::mat4 bbb;
-	//	memcpy(glm::value_ptr(bbb), aaa, sizeof(aaa));
-	//	//cout << "bbb: " << glm::to_string(bbb) << endl;
-	//	headdd->setRotation(bbb);
-	//}
-	//
-
-
-
-	vector<Bone*> myBone;
-
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_Hips"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_Spine"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_Spine1"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_Spine2"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_Neck"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_Head"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_LeftShoulder"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_LeftArm"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_LeftForeArm"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_LeftHand"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_RightShoulder"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_RightArm"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_RightForeArm"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_RightHand"));
-
-
-	for (int i = 0; i < myBone.size(); i++)
-		cout << myBone[i]->GetBoneName() << endl;
-	std::ifstream Anson("Anson.txt");
+	std::ifstream file("Head_rotate_1.txt");
 	std::string str;
-	int showing = 0;
-	while (std::getline(Anson, str))
+	
+	float aaa[16] = { 1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1 };
+	glm::mat4 bbb;
+	memcpy(glm::value_ptr(bbb), aaa, sizeof(aaa));
+	cout << "bbb: " << glm::to_string(bbb) << endl;
+	
+	
+	auto headdd = (&person1_animation)->FindBone("mixamorig_Head");
+
+	while (std::getline(file, str))
 	{
-		float x, y, z;
+		float aaa[16]; int aindex = 0;
+		size_t pos = 0; aaa[12] = 0, aaa[13] = 0, aaa[14] = 0, aaa[15] = 1;
+		string token; string delimiter = ",";
+		while (((pos = str.find(delimiter)) != std::string::npos) && aindex < 12) {
+			token = str.substr(0, pos);
+			//std::cout << token << std::endl;
+			aaa[aindex] = stof(str); aindex++;
+			str.erase(0, pos + delimiter.length());
+		}
+		glm::mat4 bbb;
+		memcpy(glm::value_ptr(bbb), aaa, sizeof(aaa));
+		//cout << "bbb: " << glm::to_string(bbb) << endl;
+		headdd->setRotation(bbb);
+	}
+	
+	vector<eye_angle> eye;
+	std::ifstream eye1("head_eye_angle1.txt");
+	std::string strrr;
+	int showing = 0;
+	while (std::getline(eye1, strrr))
+	{
+		float x, y;
 		size_t pos = 0;
 		string token;
-		string delimiter = " "; pos = str.find(delimiter); token = str.substr(0, pos); str.erase(0, pos + delimiter.length());
-		for (int i = 0; i < 14; i++)
-		{
-			
-
-			delimiter = "  "; pos = str.find(delimiter); token = str.substr(0, pos); x = stof(str); str.erase(0, pos + delimiter.length());
-			delimiter = "  "; pos = str.find(delimiter); token = str.substr(0, pos); y = stof(str); str.erase(0, pos + delimiter.length());
-			delimiter = " "; pos = str.find(delimiter); token = str.substr(0, pos); z = stof(str); str.erase(0, pos + delimiter.length());
-
-			if (showing < 1000)
-			{
-				if (i == 7)
-				{
-					cout << "left arm rotation: " << x << "," << y << "," << z << endl;
-					showing++;
-
-				}
-				if (i == 11)
-				{
-					cout << "Right arm rotation: " << x << "," << y << "," << z << endl;
-					showing++;
-				}
-					
-				
-			}
-			
-				
-			/*
-			glm::quat MyQuaternion(glm::vec3(glm::radians(x), glm::radians(-y), glm::radians(-z)));
-			if (myBone[i]->GetBoneName().compare("mixamorig_RightShoulder") == 0)
-				MyQuaternion = glm::quat(glm::vec3(glm::radians(x), glm::radians(-y-15), glm::radians(-z+40)));
-			else if (myBone[i]->GetBoneName().compare("mixamorig_LeftShoulder") == 0)
-				MyQuaternion = glm::quat(glm::vec3(glm::radians(x), glm::radians(-y-15), glm::radians(-z - 40)));
-			glm::mat4 bbb = glm::toMat4(MyQuaternion);
-
-			*/
-			glm::mat4 bbb; bbb = glm::mat4(1.0f);
-
-
-
-			/* roll, pitch, yaw
-			bbb = glm::rotate(bbb, -glm::radians(x), glm::vec3(0, 0, 1));
-			bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
-			bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
-			*/
-			//normal x,y,z
-			bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(1, 0, 0));
-			bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(0, 1, 0));
-			bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 0, 1));
-			
-			
-			
-			//cout << "bbb: " << glm::to_string(bbb) << endl;
-			myBone[i]->setRotation(bbb);
-		}
-		
+		string delimiter = ","; pos = strrr.find(delimiter); token = strrr.substr(0, pos); strrr.erase(0, pos + delimiter.length());
+		pos = strrr.find(delimiter); token = strrr.substr(0, pos); strrr.erase(0, pos + delimiter.length());
+		pos = strrr.find(delimiter); token = strrr.substr(0, pos); strrr.erase(0, pos + delimiter.length());
+		pos = strrr.find(delimiter); token = strrr.substr(0, pos); x = stof(strrr); strrr.erase(0, pos + delimiter.length());
+		pos = strrr.find(delimiter); token = strrr.substr(0, pos); y = stof(strrr); strrr.erase(0, pos + delimiter.length());
+		eye_angle a; a.x = x; a.y = y;
+		eye.push_back(a);
 
 	}
+
+	//vector<Bone*> myBone;
+
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_Hips"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_Spine"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_Spine1"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_Spine2"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_Neck"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_Head"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_LeftShoulder"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_LeftArm"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_LeftForeArm"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_LeftHand"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_RightShoulder"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_RightArm"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_RightForeArm"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_RightHand"));
+
+
+	//for (int i = 0; i < myBone.size(); i++)
+	//	cout << myBone[i]->GetBoneName() << endl;
+	//std::ifstream Anson("Anson.txt");
+	//std::string str;
+	////int showing = 0;
+	//while (std::getline(Anson, str)) 
+	//{
+	//	float x, y, z;
+	//	size_t pos = 0;
+	//	string token;
+	//	string delimiter = " "; pos = str.find(delimiter); token = str.substr(0, pos); str.erase(0, pos + delimiter.length());
+	//	for (int i = 0; i < 14; i++)
+	//	{
+	//		
+
+	//		delimiter = "  "; pos = str.find(delimiter); token = str.substr(0, pos); x = stof(str); str.erase(0, pos + delimiter.length());
+	//		delimiter = "  "; pos = str.find(delimiter); token = str.substr(0, pos); y = stof(str); str.erase(0, pos + delimiter.length());
+	//		delimiter = " "; pos = str.find(delimiter); token = str.substr(0, pos); z = stof(str); str.erase(0, pos + delimiter.length());
+
+
+	//		
+	//		glm::mat4 bbb; bbb = glm::mat4(1.0f);
+
+
+
+	//		/* roll, pitch, yaw
+	//		bbb = glm::rotate(bbb, -glm::radians(x), glm::vec3(0, 0, 1));
+	//		bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
+	//		bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
+	//		*/
+	//		//normal x,y,z
+	//		bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(1, 0, 0));
+	//		bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(0, 1, 0));
+	//		bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 0, 1));
+	//		
+	//		
+	//		
+	//		//cout << "bbb: " << glm::to_string(bbb) << endl;
+	//		myBone[i]->setRotation(bbb);
+	//	}
+	//	
+
+	//}
 
 	// render loop
 	// -----------
@@ -570,7 +568,10 @@ int main()
 		glBindVertexArray(lineYVAO);
 		glDrawArrays(GL_LINES, 0, 2);
 
-
+		////draw line in front of eye
+		//glm::mat4 model_eye_angle = glm::mat4(1.0f);
+		//model_eye_angle = glm::translate(model_eye_angle, glm::vec3(0.0f, 0.0f, 0.5f));
+		//model_eye_angle= glm::scale(model_eye_angle, glm::vec3(1.0f, 1.0f, 1.0f));
 
 		float character_scale = 0.5;
 		person1Shader.use();

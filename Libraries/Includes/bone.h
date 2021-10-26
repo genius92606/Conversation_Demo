@@ -182,6 +182,9 @@ public:
 	glm::mat4 get_current_rotation() {
 		return file_Rotations.front();
 	}
+	std::queue<glm::mat4> get_all_rotation() {
+		return file_Rotations;
+	}
 
 private:
 

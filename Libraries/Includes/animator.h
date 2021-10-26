@@ -52,16 +52,32 @@ public:
 			if (nodeName.compare("mixamorig_Head") == 0 || nodeName.compare("Head") == 0)
 				//Bone->Update(m_CurrentTime);
 				Bone->Update_fromFile();
-			//else if (nodeName.compare("mixamorig_Hips") == 0)
-			//	Bone->Update_fromFile();
-			//else if (nodeName.compare("mixamorig_Spine") == 0)
-			//	Bone->Update_fromFile();
-			//else if (nodeName.compare("mixamorig_Spine1") == 0)
-			//	Bone->Update_fromFile();
-			//else if (nodeName.compare("mixamorig_Spine2") == 0)
-			//	Bone->Update_fromFile();
-			//else if (nodeName.compare("mixamorig_Neck") == 0)
-			//	Bone->Update_fromFile();
+			else if (nodeName.compare("Hips") == 0)
+				Bone->Update_fromFile();
+			else if (nodeName.compare("Spine") == 0)
+				Bone->Update_fromFile();
+			else if (nodeName.compare("Spine1") == 0)
+				Bone->Update_fromFile();
+			else if (nodeName.compare("Spine2") == 0)
+				Bone->Update_fromFile();
+			else if (nodeName.compare("Neck") == 0)
+				Bone->Update_fromFile();
+			else if (nodeName.compare("LeftShoulder") == 0)
+				Bone->Update_fromFile();
+			else if (nodeName.compare("LeftArm") == 0)
+				Bone->Update_fromFile();
+			else if (nodeName.compare("LeftForeArm") == 0)
+				Bone->Update_fromFile();
+			else if (nodeName.compare("LeftHand") == 0)
+				Bone->Update_fromFile();
+			else if (nodeName.compare("RightShoulder") == 0)
+				Bone->Update_fromFile();
+			else if (nodeName.compare("RightArm") == 0)
+				Bone->Update_fromFile();
+			else if (nodeName.compare("RightForeArm") == 0)
+				Bone->Update_fromFile();
+			else if (nodeName.compare("RightHand") == 0)
+				Bone->Update_fromFile();
 			//else if (nodeName.compare("mixamorig_LeftShoulder") == 0)
 			//	Bone->Update_fromFile_left_arms();
 			//else if (nodeName.compare("mixamorig_LeftArm") == 0)

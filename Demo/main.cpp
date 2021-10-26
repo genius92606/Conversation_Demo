@@ -56,6 +56,10 @@ bool show_demo_window = false;
 bool show_another_window = false;
 ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
+//room properties
+static float roomPosition[3]={ -11.0f,-0.5f,6.0f };
+float roomScale = 0.03;
+
 //axes properties
 glm::vec4 axisXColor(0.0f, 0.0f, 1.0f, 1.0f); //blue
 glm::vec4 axisYColor(0.0f, 1.0f, 0.0f, 1.0f); //green
@@ -66,7 +70,7 @@ struct eye_angle {
 	float x;
 	float y;
 };
-float eye_height = 1.310;
+float eye_height = 1.659;
 
 using namespace std;
 
@@ -95,6 +99,10 @@ void Gui() {
 
 		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
 		ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
+		ImGui::InputFloat3("Room Position", roomPosition);
+		ImGui::InputFloat("Room Scale", &roomScale);
+
 		ImGui::SliderFloat("eye height", &eye_height, 0.0f, 10.0f);
 		if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
 			counter++;
@@ -230,6 +238,7 @@ int main()
 	Shader person3Shader("anim_model_vs.glsl", "anim_model_fs.glsl");
 	Shader normalShader("normal_vs.glsl", "normal_fs.glsl");
 	Shader eyeShader("eye_vs.glsl", "normal_fs.glsl");
+	Shader roomShader("model_loading.vs", "model_loading.fs");
 	// load models
 	// -----------
 
@@ -250,6 +259,8 @@ int main()
 	Model person3("../Resources/male3/male3.dae");
 	Animation person3_animation("../Resources/male3/male3.dae", &person3);
 	Animator person3_animator(&person3_animation);
+
+	Model room("../Resources/big-room/Room.obj");
 
 	cout << "finish loading all object and animation" << endl;
 
@@ -384,8 +395,8 @@ int main()
 	auto head1 = (&person1_animation)->FindBone("Head");
 	auto head2 = (&person2_animation)->FindBone("Head");
 	auto head3 = (&person3_animation)->FindBone("Head");
-	for (int i = 0; i < (&person3_animation)->getBones().size(); i++)
-		cout << (&person3_animation)->getBones()[i].GetBoneName() << endl;
+	//for (int i = 0; i < (&person3_animation)->getBones().size(); i++)
+	//	cout << (&person3_animation)->getBones()[i].GetBoneName() << endl;
 
 	queue<eye_angle> eye1;
 	queue<eye_angle> eye2;
@@ -574,6 +585,16 @@ int main()
 		glBindTexture(GL_TEXTURE_2D, floorTexture);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
+		//draw room
+		roomShader.use();
+		roomShader.setMat4("projection", projection);
+		roomShader.setMat4("view", view);
+		glm::mat4 model_room = glm::mat4(1.0f);
+		model_room = glm::translate(model_room, glm::vec3(roomPosition[0], roomPosition[1], roomPosition[2])); // translate it down so it's at the center of the scene
+		model_room = glm::scale(model_room, glm::vec3(roomScale, roomScale, roomScale));	// it's a bit too big for our scene, so scale it down
+		roomShader.setMat4("model", model_room);
+		room.Draw(roomShader);
+
 		//draw axes
 		normalShader.use();
 		normalShader.setMat4("projection", projection);
@@ -596,7 +617,6 @@ int main()
 		glBindVertexArray(lineYVAO);
 		glDrawArrays(GL_LINES, 0, 2);
 
-		
 
 		float character_scale = 0.5;
 		person1Shader.use();

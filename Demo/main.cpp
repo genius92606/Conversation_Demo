@@ -194,40 +194,40 @@ int main()
 	// -----------------------------
 	glEnable(GL_DEPTH_TEST);
 
-	// set up vertex data (and buffer(s)) and configure vertex attributes
-  // ------------------------------------------------------------------
-	float planeVertices[] = {
-		// positions            // normals         // texcoords
-		 10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,  10.0f,  0.0f,
-		-10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
-		-10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f,
+	//// set up vertex data (and buffer(s)) and configure vertex attributes
+ // // ------------------------------------------------------------------
+	//float planeVertices[] = {
+	//	// positions            // normals         // texcoords
+	//	 10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,  10.0f,  0.0f,
+	//	-10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
+	//	-10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f,
 
-		 10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,  10.0f,  0.0f,
-		-10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f,
-		 10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,  10.0f, 10.0f
-	};
-	// plane VAO
-	unsigned int planeVAO, planeVBO;
-	glGenVertexArrays(1, &planeVAO);
-	glGenBuffers(1, &planeVBO);
-	glBindVertexArray(planeVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), planeVertices, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	glBindVertexArray(0);
+	//	 10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,  10.0f,  0.0f,
+	//	-10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f,
+	//	 10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,  10.0f, 10.0f
+	//};
+	//// plane VAO
+	//unsigned int planeVAO, planeVBO;
+	//glGenVertexArrays(1, &planeVAO);
+	//glGenBuffers(1, &planeVBO);
+	//glBindVertexArray(planeVAO);
+	//glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), planeVertices, GL_STATIC_DRAW);
+	//glEnableVertexAttribArray(0);
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	//glEnableVertexAttribArray(1);
+	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	//glEnableVertexAttribArray(2);
+	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	//glBindVertexArray(0);
 
-	//// load textures
- //  // -------------
-	unsigned int floorTexture = loadTexture("../Resources/textures/wood.png");
+	////// load textures
+ ////  // -------------
+	//unsigned int floorTexture = loadTexture("../Resources/textures/wood.png");
 
-	Shader floorShader("model_loading.vs", "model_loading.fs");
-	floorShader.use();
-	floorShader.setInt("texture1", 0);
+	//Shader floorShader("model_loading.vs", "model_loading.fs");
+	//floorShader.use();
+	//floorShader.setInt("texture1", 0);
 
 	//// build and compile shaders
 	//// -------------------------
@@ -567,23 +567,22 @@ int main()
 		glClearColor(0.32157f, 0.32157f, 0.32157f, 0.1f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		
-
-		// draw objects
-		floorShader.use();
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		glm::mat4 view = camera.GetViewMatrix();
-		floorShader.setMat4("projection", projection);
-		floorShader.setMat4("view", view);
-		glm::mat4 model_floor = glm::mat4(1.0f);
-		model_floor = glm::translate(model_floor, glm::vec3(0.0f, 0.0f, 0.5f)); // translate it down so it's at the center of the scene
-		model_floor = glm::scale(model_floor, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
-		floorShader.setMat4("model", model_floor);
-		// floor
-		glBindVertexArray(planeVAO);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, floorTexture);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		//// draw objects
+		//floorShader.use();
+		//floorShader.setMat4("projection", projection);
+		//floorShader.setMat4("view", view);
+		//glm::mat4 model_floor = glm::mat4(1.0f);
+		//model_floor = glm::translate(model_floor, glm::vec3(0.0f, 0.0f, 0.5f)); // translate it down so it's at the center of the scene
+		//model_floor = glm::scale(model_floor, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
+		//floorShader.setMat4("model", model_floor);
+		//// floor
+		//glBindVertexArray(planeVAO);
+		//glActiveTexture(GL_TEXTURE0);
+		//glBindTexture(GL_TEXTURE_2D, floorTexture);
+		//glDrawArrays(GL_TRIANGLES, 0, 6);
 
 		//draw room
 		roomShader.use();

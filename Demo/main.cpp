@@ -775,7 +775,6 @@ int main()
 		eye_angle temp = eye1.front(); eye1.pop();
 		eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.x), glm::vec3(0.0f, 1.0f, 0.0f));
 		eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.y), glm::vec3(1.0f, 0.0f, 0.0f));
-
 		glm::mat4 model_eye_angle = glm::mat4(1.0f);
 		model_eye_angle = glm::translate(model_eye_angle, glm::vec3(0.0f, eye_height, 0.0f));
 		model_eye_angle = glm::scale(model_eye_angle, glm::vec3(character_scale * 2));

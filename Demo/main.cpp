@@ -61,9 +61,9 @@ static float roomPosition[3]={ -11.0f,-0.5f,6.0f };
 float roomScale = 0.03;
 
 //axes properties
-glm::vec4 axisXColor(0.0f, 0.0f, 1.0f, 1.0f); //blue
+glm::vec4 axisZColor(0.0f, 0.0f, 1.0f, 1.0f); //blue
 glm::vec4 axisYColor(0.0f, 1.0f, 0.0f, 1.0f); //green
-glm::vec4 axisZColor(1.0f, 0.0f, 0.0f, 1.0f); //red
+glm::vec4 axisXColor(1.0f, 0.0f, 0.0f, 1.0f); //red
 
 //eye properties
 struct eye_angle {

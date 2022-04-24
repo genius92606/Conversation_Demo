@@ -81,10 +81,12 @@ public:
 		glm::mat4 scale = InterpolateScaling(animationTime);
 		m_LocalTransform = translation * rotation * scale;
 	}
-	void Update_fromFile()
+	void Update_fromFile(int frame)
 	{
 		glm::mat4 translation = glm::translate(glm::mat4(1.0f), m_Positions[0].position);
-		glm::mat4 rotation = file_Rotations.front(); file_Rotations.pop();
+		glm::mat4 rotation = file_Rotations[frame];
+		//glm::mat4 rotation = file_Rotations.front(); //file_Rotations.pop(); 
+		//file_Rotations.erase(file_Rotations.begin());
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), m_Scales[0].scale);
 		m_LocalTransform = translation * rotation * scale;
 	}
@@ -99,7 +101,8 @@ public:
 	void Update_fromFile_with_tune(glm::mat4 rotate)
 	{
 		glm::mat4 translation = glm::translate(glm::mat4(1.0f), m_Positions[0].position);
-		glm::mat4 rotation = file_Rotations.front(); file_Rotations.pop();
+		glm::mat4 rotation = file_Rotations.front(); //file_Rotations.pop(); 
+		file_Rotations.erase(file_Rotations.begin());
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), m_Scales[0].scale);
 		m_LocalTransform = translation * rotation * rotate * scale;
 	}
@@ -110,7 +113,8 @@ public:
 
 		auto arms_inverse = glm::inverse(arms);
 		glm::mat4 translation = glm::translate(glm::mat4(1.0f), m_Positions[0].position);
-		glm::mat4 rotation = file_Rotations.front(); file_Rotations.pop();
+		glm::mat4 rotation = file_Rotations.front(); //file_Rotations.pop(); 
+		file_Rotations.erase(file_Rotations.begin());
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), m_Scales[0].scale);
 		m_LocalTransform = translation * arms_inverse* rotation *arms * scale;
 	}
@@ -121,7 +125,8 @@ public:
 
 		auto arms_inverse = glm::inverse(arms);
 		glm::mat4 translation = glm::translate(glm::mat4(1.0f), m_Positions[0].position);
-		glm::mat4 rotation = file_Rotations.front(); file_Rotations.pop();
+		glm::mat4 rotation = file_Rotations.front(); //file_Rotations.pop(); 
+		file_Rotations.erase(file_Rotations.begin());
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), m_Scales[0].scale);
 		m_LocalTransform = translation * arms_inverse* rotation *arms * scale;
 	}
@@ -177,12 +182,12 @@ public:
 		return m_Positions;
 	}
 	void setRotation(glm::mat4 rot) {
-		file_Rotations.push(rot);
+		file_Rotations.push_back(rot);
 	}
 	glm::mat4 get_current_rotation() {
 		return file_Rotations.front();
 	}
-	std::queue<glm::mat4> get_all_rotation() {
+	std::vector<glm::mat4> get_all_rotation() {
 		return file_Rotations;
 	}
 
@@ -247,7 +252,7 @@ private:
 	std::vector<KeyPosition> m_Positions;
 	std::vector<KeyRotation> m_Rotations;
 	std::vector<KeyScale> m_Scales;
-	std::queue<glm::mat4> file_Rotations;
+	std::vector<glm::mat4> file_Rotations;
 	int m_NumPositions;
 	int m_NumRotations;
 	int m_NumScalings;

@@ -75,6 +75,8 @@ float eye_height = 1.659;
 using namespace std;
 
 
+//frame properties
+int frame = 0;
 
 void Gui() {
 	// Start the Dear ImGui frame
@@ -89,7 +91,7 @@ void Gui() {
 	// 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
 	{
 		static float f = 0.0f;
-		static int counter = 0;
+		
 
 		ImGui::Begin("Simple Window");                          // Create a window called "Hello, world!" and append into it.
 
@@ -104,10 +106,13 @@ void Gui() {
 		ImGui::InputFloat("Room Scale", &roomScale);
 
 		ImGui::SliderFloat("eye height", &eye_height, 0.0f, 10.0f);
-		if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-			counter++;
+		//if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+		//	counter++;
+
+		ImGui::SliderInt("frame", &frame, 0, 10000);
 		ImGui::SameLine();
-		ImGui::Text("counter = %d", counter);
+		//ImGui::Text("counter = %d", frame);
+
 
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::End();
@@ -155,7 +160,7 @@ int main()
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	// comment if you don't want the cursor movement
-	glfwSetCursorPosCallback(window, mouse_callback);
+	//glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 
 	
@@ -398,9 +403,9 @@ int main()
 	//for (int i = 0; i < (&person3_animation)->getBones().size(); i++)
 	//	cout << (&person3_animation)->getBones()[i].GetBoneName() << endl;
 
-	queue<eye_angle> eye1;
-	queue<eye_angle> eye2;
-	queue<eye_angle> eye3;
+	vector<eye_angle> eye1;
+	vector<eye_angle> eye2;
+	vector<eye_angle> eye3;
 	std::ifstream file;
 	std::string str;
 	for (int i = 0; i < 3; i++)
@@ -465,11 +470,11 @@ int main()
 			pos = str.find(delimiter); token = str.substr(0, pos); y = stof(str); str.erase(0, pos + delimiter.length());
 			eye_angle a; a.x = x; a.y = y;
 			if (i == 0)
-				eye1.push(a);
+				eye1.push_back(a);
 			else if (i == 1)
-				eye2.push(a);
+				eye2.push_back(a);
 			else
-				eye3.push(a);
+				eye3.push_back(a);
 			
 
 		}
@@ -652,9 +657,9 @@ int main()
 		// -----
 		processInput(window);
 
-		person1_animator.UpdateAnimation(deltaTime);
-		person2_animator.UpdateAnimation(deltaTime);
-		person3_animator.UpdateAnimation(deltaTime);
+		person1_animator.UpdateAnimation(frame);
+		person2_animator.UpdateAnimation(frame);
+		person3_animator.UpdateAnimation(frame);
 
 		// render
 		// ------
@@ -772,7 +777,8 @@ int main()
 		glLineWidth(5);
 
 		glm::mat4 eyeAngle = glm::mat4(1.0f);
-		eye_angle temp = eye1.front(); eye1.pop();
+		//eye_angle temp = eye1.front(); eye1.pop();
+		eye_angle temp = eye1[frame];
 		eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.x), glm::vec3(0.0f, 1.0f, 0.0f));
 		eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.y), glm::vec3(1.0f, 0.0f, 0.0f));
 		glm::mat4 model_eye_angle = glm::mat4(1.0f);
@@ -786,7 +792,8 @@ int main()
 		glDrawArrays(GL_LINES, 0, 2);
 
 		eyeAngle = glm::mat4(1.0f);
-		temp = eye2.front(); eye2.pop();
+		//temp = eye2.front(); eye2.pop();
+		temp = eye2[frame];
 		eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.x), glm::vec3(0.0f, 1.0f, 0.0f));
 		eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.y), glm::vec3(1.0f, 0.0f, 0.0f));
 		model_eye_angle = glm::mat4(1.0f);
@@ -801,7 +808,8 @@ int main()
 		glDrawArrays(GL_LINES, 0, 2);
 
 		eyeAngle = glm::mat4(1.0f);
-		temp = eye3.front(); eye3.pop();
+		//temp = eye3.front(); eye3.pop();
+		temp = eye3[frame];
 		eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.x), glm::vec3(0.0f, 1.0f, 0.0f));
 		eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.y), glm::vec3(1.0f, 0.0f, 0.0f));
 
@@ -844,7 +852,7 @@ int main()
 		while ((glfwGetTime() - currentFrame) < 1.0 / TARGET_FPS) {
 			// TODO: Put the thread to sleep, yield, or simply do nothing
 		}
-
+		frame++;
 	}
 
 	// Cleanup

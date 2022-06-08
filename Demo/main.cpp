@@ -400,8 +400,8 @@ int main()
 	//auto head1 = (&person1_animation)->FindBone("Head");
 	//auto head2 = (&person2_animation)->FindBone("Head");
 	//auto head3 = (&person3_animation)->FindBone("Head");
-	//for (int i = 0; i < (&person3_animation)->getBones().size(); i++)
-	//	cout << (&person3_animation)->getBones()[i].GetBoneName() << endl;
+	for (int i = 0; i < (&person3_animation)->getBones().size(); i++)
+		cout << (&person3_animation)->getBones()[i].GetBoneName() << endl;
 
 	vector<eye_angle> eye1;
 	vector<eye_angle> eye2;
@@ -553,7 +553,9 @@ int main()
 				delimiter = "  "; pos = str.find(delimiter); token = str.substr(0, pos); y = stof(str); str.erase(0, pos + delimiter.length());
 				delimiter = " "; pos = str.find(delimiter); token = str.substr(0, pos); z = stof(str); str.erase(0, pos + delimiter.length());
 
-				if (k % 4 == 0) {
+				//Setup rotation for each joint based on different orientation
+				
+				if (k % 4 == 0) { //cause orignial file is 120hz, I reduce it to 30hz
 					glm::mat4 bbb; bbb = glm::mat4(1.0f);
 
 
@@ -854,7 +856,7 @@ int main()
 		}
 		frame++;
 	}
-
+	
 	// Cleanup
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();

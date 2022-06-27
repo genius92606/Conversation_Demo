@@ -42,7 +42,8 @@ public:
 	{
 		std::string nodeName = node->name;
 		glm::mat4 nodeTransform = node->transformation;
-
+		glm::mat4 temp; temp = glm::mat4(1.0f);
+		temp= glm::rotate(temp, glm::radians(30.0f), glm::vec3(0, 0, 1));
 		Bone* Bone = m_CurrentAnimation->FindBone(nodeName);
 
 		if (Bone)
@@ -52,7 +53,7 @@ public:
 				//Bone->Update(m_CurrentTime);
 				Bone->Update_fromFile(frame);
 			//else if (nodeName.compare("Hips") == 0)
-				//Bone->Update_fromFile(frame);
+			//	Bone->Update_fromFile(frame);
 				//Bone->Update_without_rotation();
 			//else if (nodeName.compare("Spine") == 0)
 			//	Bone->Update_fromFile(frame);

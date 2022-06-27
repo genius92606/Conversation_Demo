@@ -90,12 +90,12 @@ public:
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), m_Scales[0].scale);
 		m_LocalTransform = translation * rotation * scale;
 	}
-	void Update_manually(float animationTime, glm::mat4 rotate)
+	void Update_manually(glm::mat4 rotate)
 	{
 		glm::mat4 translation = glm::translate(glm::mat4(1.0f), m_Positions[0].position);
 		//translation = translate * translation;
 		glm::mat4 rotation = rotate;
-		glm::mat4 scale = InterpolateScaling(animationTime);
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), m_Scales[0].scale);
 		m_LocalTransform = translation * rotation * scale;
 	}
 	void Update_fromFile_with_tune(glm::mat4 rotate)

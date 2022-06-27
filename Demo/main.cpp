@@ -620,7 +620,7 @@ int main()
 
 	std::ifstream file;
 	std::string str;
-	file = ifstream("person1.txt");
+	file = ifstream("person3.txt");
 	cout << "start loading person1.txt" << endl;
 	int k = 0;
 	while (std::getline(file, str))
@@ -628,80 +628,58 @@ int main()
 		float x, y, z;
 		size_t pos = 0;
 		string token;
-		string delimiter = " "; pos = str.find(delimiter); token = str.substr(0, pos); str.erase(0, pos + delimiter.length());
+		string delimiter = " ";
 		for (int j = 0; j < 22; j++)
 		{
 
 
-			delimiter = "  "; pos = str.find(delimiter); token = str.substr(0, pos); x = stof(str); str.erase(0, pos + delimiter.length());
-			delimiter = "  "; pos = str.find(delimiter); token = str.substr(0, pos); y = stof(str); str.erase(0, pos + delimiter.length());
+			delimiter = " "; pos = str.find(delimiter); token = str.substr(0, pos); x = stof(str); str.erase(0, pos + delimiter.length());
+			delimiter = " "; pos = str.find(delimiter); token = str.substr(0, pos); y = stof(str); str.erase(0, pos + delimiter.length());
 			delimiter = " "; pos = str.find(delimiter); token = str.substr(0, pos); z = stof(str); str.erase(0, pos + delimiter.length());
 			//cout << j << ":" << x << " " << y << " " << z << endl;
 			//Setup rotation for each joint based on different orientation
 
-			if (k % 4 == 0) { //cause orignial file is 120hz, I reduce it to 30hz
+			if (k % 2 == 0) { //cause orignial file is 60hz, I reduce it to 30hz
 				glm::mat4 bbb; bbb = glm::mat4(1.0f);
 				glm::mat4 ttt; ttt = glm::mat4(1.0f);
+				if (j == 0) //left arm
+				{
+					bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
+					bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
+					//bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
+				}
+				else if (j == 12) //left arm
+				{
+					bbb = glm::rotate(bbb, glm::radians(x - 90), glm::vec3(0, 0, 1));
+					bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
+					bbb = glm::rotate(bbb, glm::radians(z -10), glm::vec3(0, 1, 0));
+				}
+				else if (j == 13) //left forearm
+				{
+					bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
+					bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
+					bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
+				}
+				else if (j == 16) //right arm
+				{
+					bbb = glm::rotate(bbb, glm::radians(x + 90), glm::vec3(0, 0, 1));
+					bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
+					bbb = glm::rotate(bbb, glm::radians(z + 10), glm::vec3(0, 1, 0));
+				}
+				else if (j == 17) //right forearm
+				{
+					bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
+					bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
+					bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
+				}
+				else
+				{
+					bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
+					bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
+					bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
+				}
 
-
-				//if (j < 1) { //spine
-				//	//bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(1, 0, 0));
-				//	//bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(0, 1, 0));
-				//	//bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 0, 1));
-				//	bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
-				//	bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
-				//	bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
-				//}
-				//else if (j < 5) { //left leg
-				//	//bbb = glm::rotate(bbb, -glm::radians(x), glm::vec3(0, 0, 1));
-				//	//bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
-				//	//bbb = glm::rotate(bbb, -glm::radians(z), glm::vec3(0, 1, 0));
-				//	bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
-				//	bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(0, 1, 0));
-				//	bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(1, 0, 0));
-				//}
-				//else if (j < 9)	{ //right leg
-				//	//bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
-				//	//bbb = glm::rotate(bbb, -glm::radians(y), glm::vec3(1, 0, 0));
-				//	//bbb = glm::rotate(bbb, -glm::radians(z), glm::vec3(0, 1, 0));
-				//	bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
-				//	bbb = glm::rotate(bbb, -glm::radians(y), glm::vec3(0, 1, 0));
-				//	bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(1, 0, 0));
-
-				//}
-				//else if (j < 11) { //spine
-				//	//bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(1, 0, 0));
-				//	//bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(0, 1, 0));
-				//	//bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 0, 1));
-				//	bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
-				//	bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
-				//	bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
-				//}
-				//else if (j < 15) { //left arm
-				//	//bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(1, 0, 0));
-				//	//bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(0, 1, 0));
-				//	//bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 0, 1));
-				//	bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
-				//	bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(0, 1, 0));
-				//	bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(1, 0, 0));
-
-				//}
-				//else if (j < 19) { //right arm
-				//	//bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
-				//	//bbb = glm::rotate(bbb, -glm::radians(y), glm::vec3(1, 0, 0));
-				//	//bbb = glm::rotate(bbb, -glm::radians(z), glm::vec3(0, 1, 0));
-				//	bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
-				//	bbb = glm::rotate(bbb, -glm::radians(y), glm::vec3(0, 1, 0));
-				//	bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(1, 0, 0));
-
-				//}
-
-
-				bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
-				bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
-				bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
-
-				if (j < 19)
+				if (j<19)
 				{
 					newBone[j]->setRotation(bbb);
 					//newBone[j]->setPosition(glm::vec3(0, 0, 0));
@@ -773,12 +751,12 @@ int main()
 	//	
 
 	//}
-	for (int k = 0; k < 3; k++) {
-		for (int i = 0; i < 19; i++)
-		{
-			cout << "bone" << i << ": " << glm::to_string(newBone[i]->get_current_rotation()) << endl;
-		}
-	}
+	//for (int k = 0; k < 3; k++) {
+	//	for (int i = 0; i < 19; i++)
+	//	{
+	//		cout << "bone" << i << ": " << glm::to_string(newBone[i]->get_current_rotation()) << endl;
+	//	}
+	//}
 
 
 	// render loop

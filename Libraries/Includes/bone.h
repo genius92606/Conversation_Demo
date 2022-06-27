@@ -90,7 +90,7 @@ public:
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), m_Scales[0].scale);
 		m_LocalTransform = translation * rotation * scale;
 	}
-	void Update_manually(float animationTime,  glm::mat4 rotate)
+	void Update_manually(float animationTime, glm::mat4 rotate)
 	{
 		glm::mat4 translation = glm::translate(glm::mat4(1.0f), m_Positions[0].position);
 		//translation = translate * translation;
@@ -173,7 +173,7 @@ public:
 	void setManually(glm::mat4 mat) {
 		m_LocalTransform = mat;
 	}
-	
+
 	int getNP() {
 		return m_NumPositions;
 	}
@@ -183,6 +183,9 @@ public:
 	}
 	void setRotation(glm::mat4 rot) {
 		file_Rotations.push_back(rot);
+	}
+	void setPosition(glm::vec3 pos) {
+		file_Positions.push_back(pos);
 	}
 	glm::mat4 get_current_rotation() {
 		return file_Rotations.front();
@@ -253,6 +256,7 @@ private:
 	std::vector<KeyRotation> m_Rotations;
 	std::vector<KeyScale> m_Scales;
 	std::vector<glm::mat4> file_Rotations;
+	std::vector<glm::vec3> file_Positions;
 	int m_NumPositions;
 	int m_NumRotations;
 	int m_NumScalings;

@@ -39,7 +39,7 @@ const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1080;
 
 // camera
-Camera camera(glm::vec3(0.868368f, 3.01393f, 3.93507f), glm::vec3(-0.173054f, 0.805921f, -0.566166f),-107.4f,-36.3f);
+Camera camera(glm::vec3(0.868368f, 3.01393f, 3.93507f), glm::vec3(-0.173054f, 0.805921f, -0.566166f), -107.4f, -36.3f);
 
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
@@ -57,7 +57,7 @@ bool show_another_window = false;
 ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 //room properties
-static float roomPosition[3]={ -11.0f,-0.5f,6.0f };
+static float roomPosition[3] = { -11.0f,-0.5f,6.0f };
 float roomScale = 0.03;
 
 //axes properties
@@ -91,7 +91,7 @@ void Gui() {
 	// 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
 	{
 		static float f = 0.0f;
-		
+
 
 		ImGui::Begin("Simple Window");                          // Create a window called "Hello, world!" and append into it.
 
@@ -163,7 +163,7 @@ int main()
 	//glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 
-	
+
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	// glad: load all OpenGL function pointers
@@ -173,7 +173,7 @@ int main()
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return -1;
 	}
-	
+
 	/// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -190,13 +190,13 @@ int main()
 	const char* glsl_version = "#version 130";
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
-	
 
-	 //tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
-	//stbi_set_flip_vertically_on_load(true);
 
-	// configure global opengl state
-	// -----------------------------
+	//tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
+   //stbi_set_flip_vertically_on_load(true);
+
+   // configure global opengl state
+   // -----------------------------
 	glEnable(GL_DEPTH_TEST);
 
 	//// set up vertex data (and buffer(s)) and configure vertex attributes
@@ -254,20 +254,21 @@ int main()
 	//Model person2("../Resources/person2/person2.dae");
 	//Animation person2_animation("../Resources/person2/person2.dae", &person2);
 	//Animator person2_animator(&person2_animation);
-	Model person1("../Resources/male3/male3.dae"); 
+
+	Model person1("../Resources/male3/male3.dae");
 	Animation person1_animation("../Resources/male3/male3.dae", &person1);
 	Animator person1_animator(&person1_animation);
 
-	Model person2("../Resources/male3/male3.dae");
-	Animation person2_animation("../Resources/male3/male3.dae", &person2);
-	Animator person2_animator(&person2_animation);
-	Model person3("../Resources/male3/male3.dae");
-	Animation person3_animation("../Resources/male3/male3.dae", &person3);
-	Animator person3_animator(&person3_animation);
+	//Model person2("../Resources/male3/male3.dae");
+	//Animation person2_animation("../Resources/male3/male3.dae", &person2);
+	//Animator person2_animator(&person2_animation);
+	//Model person3("../Resources/male3/male3.dae");
+	//Animation person3_animation("../Resources/male3/male3.dae", &person3);
+	//Animator person3_animator(&person3_animation);
 
 	Model room("../Resources/big-room/Room.obj");
 
-	cout << "finish loading all object and animation" << endl;
+	//cout << "finish loading all object and animation" << endl;
 
 
 	float skyboxVertices[] = {
@@ -389,7 +390,7 @@ int main()
 
 
 
-	
+
 	/*float aaa[16] = { 1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1 };
 	glm::mat4 bbb;
 	memcpy(glm::value_ptr(bbb), aaa, sizeof(aaa));
@@ -400,200 +401,332 @@ int main()
 	//auto head1 = (&person1_animation)->FindBone("Head");
 	//auto head2 = (&person2_animation)->FindBone("Head");
 	//auto head3 = (&person3_animation)->FindBone("Head");
-	for (int i = 0; i < (&person3_animation)->getBones().size(); i++)
-		cout << (&person3_animation)->getBones()[i].GetBoneName() << endl;
 
-	vector<eye_angle> eye1;
-	vector<eye_angle> eye2;
-	vector<eye_angle> eye3;
+
+	//for (int i = 0; i < (&person3_animation)->getBones().size(); i++)
+	//	cout << (&person3_animation)->getBones()[i].GetBoneName() << endl;
+
+	//vector<eye_angle> eye1;
+	//vector<eye_angle> eye2;
+	//vector<eye_angle> eye3;
+	//std::ifstream file;
+	//std::string str;
+	//for (int i = 0; i < 3; i++)
+	//{
+	//	
+
+	//	//if(i==0)
+	//	//	file = std::ifstream("Head_rotate_1.txt");
+	//	//else if(i==1)
+	//	//	file = std::ifstream("Head_rotate_2.txt");
+	//	//else
+	//	//	file = std::ifstream("Head_rotate_3.txt");
+
+	//	//
+	//	//
+	//	//while (std::getline(file, str))
+	//	//{
+	//	//	float aaa[16]; int aindex = 0;
+	//	//	size_t pos = 0; aaa[12] = 0, aaa[13] = 0, aaa[14] = 0, aaa[15] = 1;
+	//	//	string token; string delimiter = ",";
+	//	//	while (((pos = str.find(delimiter)) != std::string::npos) && aindex < 12) {
+	//	//		token = str.substr(0, pos);
+	//	//		//std::cout << token << std::endl;
+	//	//		aaa[aindex] = stof(str); aindex++;
+	//	//		str.erase(0, pos + delimiter.length());
+	//	//	}
+	//	//	glm::mat4 bbb;
+	//	//	memcpy(glm::value_ptr(bbb), aaa, sizeof(aaa));
+	//	//	//cout << "bbb: " << glm::to_string(bbb) << endl;
+	//	//	if (i == 0)
+	//	//		head1->setRotation(bbb);
+	//	//	else if (i == 1)
+	//	//	{
+	//	//		head2->setRotation(bbb);
+	//	//	}
+	//	//	else
+	//	//	{
+	//	//		head3->setRotation(bbb);
+
+	//	//	}
+	//	//		
+	//	//	
+	//	//}
+
+	//	if (i == 0)
+	//		file = std::ifstream("head_eye_angle1.txt");
+	//	else if (i == 1)
+	//		file = std::ifstream("head_eye_angle2.txt");
+	//	else
+	//		file = std::ifstream("head_eye_angle3.txt");
+
+
+	//	while (std::getline(file, str))
+	//	{
+	//		float x, y;
+	//		size_t pos = 0;
+	//		string token;
+	//		string delimiter = ","; pos = str.find(delimiter); token = str.substr(0, pos); str.erase(0, pos + delimiter.length());
+	//		pos = str.find(delimiter); token = str.substr(0, pos); str.erase(0, pos + delimiter.length());
+	//		pos = str.find(delimiter); token = str.substr(0, pos); str.erase(0, pos + delimiter.length());
+	//		pos = str.find(delimiter); token = str.substr(0, pos); x = stof(str); str.erase(0, pos + delimiter.length());
+	//		pos = str.find(delimiter); token = str.substr(0, pos); y = stof(str); str.erase(0, pos + delimiter.length());
+	//		eye_angle a; a.x = x; a.y = y;
+	//		if (i == 0)
+	//			eye1.push_back(a);
+	//		else if (i == 1)
+	//			eye2.push_back(a);
+	//		else
+	//			eye3.push_back(a);
+	//		
+
+	//	}
+
+	//}
+
+	////cout << "head2 stuff: " << glm::to_string(head2->get_current_rotation()) << endl;
+	////cout << "head3: " << glm::to_string(head3->get_current_rotation()) << endl;
+
+
+
+	//vector<Bone*> myBone1; vector<Bone*> myBone2; vector<Bone*> myBone3;
+
+	///*myBone.push_back((&person1_animation)->FindBone("mixamorig_Hips"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_Spine"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_Spine1"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_Spine2"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_Neck"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_Head"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_LeftShoulder"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_LeftArm"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_LeftForeArm"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_LeftHand"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_RightShoulder"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_RightArm"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_RightForeArm"));
+	//myBone.push_back((&person1_animation)->FindBone("mixamorig_RightHand"));*/
+	//myBone1.push_back((&person1_animation)->FindBone("Hips"));myBone1.push_back((&person1_animation)->FindBone("Spine"));
+	//myBone1.push_back((&person1_animation)->FindBone("Spine1"));myBone1.push_back((&person1_animation)->FindBone("Spine2"));
+	//myBone1.push_back((&person1_animation)->FindBone("Neck"));myBone1.push_back((&person1_animation)->FindBone("Head"));
+	//myBone1.push_back((&person1_animation)->FindBone("LeftShoulder"));myBone1.push_back((&person1_animation)->FindBone("LeftArm"));
+	//myBone1.push_back((&person1_animation)->FindBone("LeftForeArm"));myBone1.push_back((&person1_animation)->FindBone("LeftHand"));
+	//myBone1.push_back((&person1_animation)->FindBone("RightShoulder"));myBone1.push_back((&person1_animation)->FindBone("RightArm"));
+	//myBone1.push_back((&person1_animation)->FindBone("RightForeArm"));myBone1.push_back((&person1_animation)->FindBone("RightHand"));
+
+	//myBone2.push_back((&person2_animation)->FindBone("Hips")); myBone2.push_back((&person2_animation)->FindBone("Spine"));
+	//myBone2.push_back((&person2_animation)->FindBone("Spine1")); myBone2.push_back((&person2_animation)->FindBone("Spine2"));
+	//myBone2.push_back((&person2_animation)->FindBone("Neck")); myBone2.push_back((&person2_animation)->FindBone("Head"));
+	//myBone2.push_back((&person2_animation)->FindBone("LeftShoulder")); myBone2.push_back((&person2_animation)->FindBone("LeftArm"));
+	//myBone2.push_back((&person2_animation)->FindBone("LeftForeArm")); myBone2.push_back((&person2_animation)->FindBone("LeftHand"));
+	//myBone2.push_back((&person2_animation)->FindBone("RightShoulder")); myBone2.push_back((&person2_animation)->FindBone("RightArm"));
+	//myBone2.push_back((&person2_animation)->FindBone("RightForeArm")); myBone2.push_back((&person2_animation)->FindBone("RightHand"));
+
+	//myBone3.push_back((&person3_animation)->FindBone("Hips")); myBone3.push_back((&person3_animation)->FindBone("Spine"));
+	//myBone3.push_back((&person3_animation)->FindBone("Spine1")); myBone3.push_back((&person3_animation)->FindBone("Spine2"));
+	//myBone3.push_back((&person3_animation)->FindBone("Neck")); myBone3.push_back((&person3_animation)->FindBone("Head"));
+	//myBone3.push_back((&person3_animation)->FindBone("LeftShoulder")); myBone3.push_back((&person3_animation)->FindBone("LeftArm"));
+	//myBone3.push_back((&person3_animation)->FindBone("LeftForeArm")); myBone3.push_back((&person3_animation)->FindBone("LeftHand"));
+	//myBone3.push_back((&person3_animation)->FindBone("RightShoulder")); myBone3.push_back((&person3_animation)->FindBone("RightArm"));
+	//myBone3.push_back((&person3_animation)->FindBone("RightForeArm")); myBone3.push_back((&person3_animation)->FindBone("RightHand"));
+
+
+	//
+
+
+	////for (int i = 0; i < myBone.size(); i++)
+	////	cout << myBone[i]->GetBoneName() << endl;
+
+	//for (int i = 0; i < 3; i++) {
+
+	//	if (i == 0)
+	//		file = std::ifstream("Anson.txt");
+	//	else if (i == 1)
+	//		file = std::ifstream("Jonathan.txt");
+	//	else
+	//		file = std::ifstream("Stephan.txt");
+	//	int k = 0;
+	//	while (std::getline(file, str))
+	//	{
+	//		float x, y, z;
+	//		size_t pos = 0;
+	//		string token;
+	//		string delimiter = " "; pos = str.find(delimiter); token = str.substr(0, pos); str.erase(0, pos + delimiter.length());
+	//		for (int j = 0; j < 14; j++)
+	//		{
+
+
+	//			delimiter = "  "; pos = str.find(delimiter); token = str.substr(0, pos); x = stof(str); str.erase(0, pos + delimiter.length());
+	//			delimiter = "  "; pos = str.find(delimiter); token = str.substr(0, pos); y = stof(str); str.erase(0, pos + delimiter.length());
+	//			delimiter = " "; pos = str.find(delimiter); token = str.substr(0, pos); z = stof(str); str.erase(0, pos + delimiter.length());
+
+	//			//Setup rotation for each joint based on different orientation
+	//			
+	//			if (k % 4 == 0) { //cause orignial file is 120hz, I reduce it to 30hz
+	//				glm::mat4 bbb; bbb = glm::mat4(1.0f);
+
+
+	//				if (j < 6) { //spine
+	//					bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(1, 0, 0));
+	//					bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(0, 1, 0));
+	//					bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 0, 1));
+	//				}
+	//				else if (j < 10) { //left
+	//					bbb = glm::rotate(bbb, -glm::radians(x), glm::vec3(0, 0, 1));
+	//					bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
+	//					bbb = glm::rotate(bbb, -glm::radians(z), glm::vec3(0, 1, 0));
+	//				}
+	//				else { //right
+	//					bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
+	//					bbb = glm::rotate(bbb, -glm::radians(y), glm::vec3(1, 0, 0));
+	//					bbb = glm::rotate(bbb, -glm::radians(z), glm::vec3(0, 1, 0));
+	//				}
+
+
+	//				//cout << "bbb: " << glm::to_string(bbb) << endl;
+	//				if (i == 0)
+	//					myBone1[j]->setRotation(bbb);
+	//				else if (i == 1)
+	//					myBone2[j]->setRotation(bbb);
+	//				else
+	//					myBone3[j]->setRotation(bbb);
+	//			}
+
+	//			
+	//		}
+
+	//		k++;
+	//	}
+	//}
+	//cout << "bone1s' size:" << myBone1[0]->get_all_rotation().size() << endl;
+	//cout << "bone2s' size:" << myBone2[0]->get_all_rotation().size() << endl;
+	//cout << "bone3s' size:" << myBone3[0]->get_all_rotation().size() << endl;
+
+	for (int i = 0; i < (&person1_animation)->getBones().size(); i++)
+		cout << (&person1_animation)->getBones()[i].GetBoneName() << endl;
+
+
+	vector<Bone*> newBone; //19 bones
+	newBone.push_back((&person1_animation)->FindBone("Hips"));
+	newBone.push_back((&person1_animation)->FindBone("LeftUpLeg")); newBone.push_back((&person1_animation)->FindBone("LeftLeg"));
+	newBone.push_back((&person1_animation)->FindBone("LeftFoot")); newBone.push_back((&person1_animation)->FindBone("LeftToeBase"));
+	newBone.push_back((&person1_animation)->FindBone("RightUpLeg")); newBone.push_back((&person1_animation)->FindBone("RightLeg"));
+	newBone.push_back((&person1_animation)->FindBone("RightFoot")); newBone.push_back((&person1_animation)->FindBone("RightToeBase"));
+	newBone.push_back((&person1_animation)->FindBone("Spine1")); newBone.push_back((&person1_animation)->FindBone("Head"));
+	newBone.push_back((&person1_animation)->FindBone("LeftShoulder")); newBone.push_back((&person1_animation)->FindBone("LeftArm"));
+	newBone.push_back((&person1_animation)->FindBone("LeftForeArm")); newBone.push_back((&person1_animation)->FindBone("LeftHand"));
+	newBone.push_back((&person1_animation)->FindBone("RightShoulder")); newBone.push_back((&person1_animation)->FindBone("RightArm"));
+	newBone.push_back((&person1_animation)->FindBone("RightForeArm")); newBone.push_back((&person1_animation)->FindBone("RightHand"));
+
+
 	std::ifstream file;
 	std::string str;
-	for (int i = 0; i < 3; i++)
+	file = ifstream("person1.txt");
+	cout << "start loading person1.txt" << endl;
+	int k = 0;
+	while (std::getline(file, str))
 	{
-		
-
-		//if(i==0)
-		//	file = std::ifstream("Head_rotate_1.txt");
-		//else if(i==1)
-		//	file = std::ifstream("Head_rotate_2.txt");
-		//else
-		//	file = std::ifstream("Head_rotate_3.txt");
-
-		//
-		//
-		//while (std::getline(file, str))
-		//{
-		//	float aaa[16]; int aindex = 0;
-		//	size_t pos = 0; aaa[12] = 0, aaa[13] = 0, aaa[14] = 0, aaa[15] = 1;
-		//	string token; string delimiter = ",";
-		//	while (((pos = str.find(delimiter)) != std::string::npos) && aindex < 12) {
-		//		token = str.substr(0, pos);
-		//		//std::cout << token << std::endl;
-		//		aaa[aindex] = stof(str); aindex++;
-		//		str.erase(0, pos + delimiter.length());
-		//	}
-		//	glm::mat4 bbb;
-		//	memcpy(glm::value_ptr(bbb), aaa, sizeof(aaa));
-		//	//cout << "bbb: " << glm::to_string(bbb) << endl;
-		//	if (i == 0)
-		//		head1->setRotation(bbb);
-		//	else if (i == 1)
-		//	{
-		//		head2->setRotation(bbb);
-		//	}
-		//	else
-		//	{
-		//		head3->setRotation(bbb);
-
-		//	}
-		//		
-		//	
-		//}
-
-		if (i == 0)
-			file = std::ifstream("head_eye_angle1.txt");
-		else if (i == 1)
-			file = std::ifstream("head_eye_angle2.txt");
-		else
-			file = std::ifstream("head_eye_angle3.txt");
-
-
-		while (std::getline(file, str))
+		float x, y, z;
+		size_t pos = 0;
+		string token;
+		string delimiter = " "; pos = str.find(delimiter); token = str.substr(0, pos); str.erase(0, pos + delimiter.length());
+		for (int j = 0; j < 22; j++)
 		{
-			float x, y;
-			size_t pos = 0;
-			string token;
-			string delimiter = ","; pos = str.find(delimiter); token = str.substr(0, pos); str.erase(0, pos + delimiter.length());
-			pos = str.find(delimiter); token = str.substr(0, pos); str.erase(0, pos + delimiter.length());
-			pos = str.find(delimiter); token = str.substr(0, pos); str.erase(0, pos + delimiter.length());
-			pos = str.find(delimiter); token = str.substr(0, pos); x = stof(str); str.erase(0, pos + delimiter.length());
-			pos = str.find(delimiter); token = str.substr(0, pos); y = stof(str); str.erase(0, pos + delimiter.length());
-			eye_angle a; a.x = x; a.y = y;
-			if (i == 0)
-				eye1.push_back(a);
-			else if (i == 1)
-				eye2.push_back(a);
-			else
-				eye3.push_back(a);
-			
-
-		}
-
-	}
-
-	//cout << "head2 stuff: " << glm::to_string(head2->get_current_rotation()) << endl;
-	//cout << "head3: " << glm::to_string(head3->get_current_rotation()) << endl;
 
 
+			delimiter = "  "; pos = str.find(delimiter); token = str.substr(0, pos); x = stof(str); str.erase(0, pos + delimiter.length());
+			delimiter = "  "; pos = str.find(delimiter); token = str.substr(0, pos); y = stof(str); str.erase(0, pos + delimiter.length());
+			delimiter = " "; pos = str.find(delimiter); token = str.substr(0, pos); z = stof(str); str.erase(0, pos + delimiter.length());
+			//cout << j << ":" << x << " " << y << " " << z << endl;
+			//Setup rotation for each joint based on different orientation
 
-	vector<Bone*> myBone1; vector<Bone*> myBone2; vector<Bone*> myBone3;
-
-	/*myBone.push_back((&person1_animation)->FindBone("mixamorig_Hips"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_Spine"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_Spine1"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_Spine2"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_Neck"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_Head"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_LeftShoulder"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_LeftArm"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_LeftForeArm"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_LeftHand"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_RightShoulder"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_RightArm"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_RightForeArm"));
-	myBone.push_back((&person1_animation)->FindBone("mixamorig_RightHand"));*/
-	myBone1.push_back((&person1_animation)->FindBone("Hips"));myBone1.push_back((&person1_animation)->FindBone("Spine"));
-	myBone1.push_back((&person1_animation)->FindBone("Spine1"));myBone1.push_back((&person1_animation)->FindBone("Spine2"));
-	myBone1.push_back((&person1_animation)->FindBone("Neck"));myBone1.push_back((&person1_animation)->FindBone("Head"));
-	myBone1.push_back((&person1_animation)->FindBone("LeftShoulder"));myBone1.push_back((&person1_animation)->FindBone("LeftArm"));
-	myBone1.push_back((&person1_animation)->FindBone("LeftForeArm"));myBone1.push_back((&person1_animation)->FindBone("LeftHand"));
-	myBone1.push_back((&person1_animation)->FindBone("RightShoulder"));myBone1.push_back((&person1_animation)->FindBone("RightArm"));
-	myBone1.push_back((&person1_animation)->FindBone("RightForeArm"));myBone1.push_back((&person1_animation)->FindBone("RightHand"));
-
-	myBone2.push_back((&person2_animation)->FindBone("Hips")); myBone2.push_back((&person2_animation)->FindBone("Spine"));
-	myBone2.push_back((&person2_animation)->FindBone("Spine1")); myBone2.push_back((&person2_animation)->FindBone("Spine2"));
-	myBone2.push_back((&person2_animation)->FindBone("Neck")); myBone2.push_back((&person2_animation)->FindBone("Head"));
-	myBone2.push_back((&person2_animation)->FindBone("LeftShoulder")); myBone2.push_back((&person2_animation)->FindBone("LeftArm"));
-	myBone2.push_back((&person2_animation)->FindBone("LeftForeArm")); myBone2.push_back((&person2_animation)->FindBone("LeftHand"));
-	myBone2.push_back((&person2_animation)->FindBone("RightShoulder")); myBone2.push_back((&person2_animation)->FindBone("RightArm"));
-	myBone2.push_back((&person2_animation)->FindBone("RightForeArm")); myBone2.push_back((&person2_animation)->FindBone("RightHand"));
-
-	myBone3.push_back((&person3_animation)->FindBone("Hips")); myBone3.push_back((&person3_animation)->FindBone("Spine"));
-	myBone3.push_back((&person3_animation)->FindBone("Spine1")); myBone3.push_back((&person3_animation)->FindBone("Spine2"));
-	myBone3.push_back((&person3_animation)->FindBone("Neck")); myBone3.push_back((&person3_animation)->FindBone("Head"));
-	myBone3.push_back((&person3_animation)->FindBone("LeftShoulder")); myBone3.push_back((&person3_animation)->FindBone("LeftArm"));
-	myBone3.push_back((&person3_animation)->FindBone("LeftForeArm")); myBone3.push_back((&person3_animation)->FindBone("LeftHand"));
-	myBone3.push_back((&person3_animation)->FindBone("RightShoulder")); myBone3.push_back((&person3_animation)->FindBone("RightArm"));
-	myBone3.push_back((&person3_animation)->FindBone("RightForeArm")); myBone3.push_back((&person3_animation)->FindBone("RightHand"));
+			if (k % 4 == 0) { //cause orignial file is 120hz, I reduce it to 30hz
+				glm::mat4 bbb; bbb = glm::mat4(1.0f);
+				glm::mat4 ttt; ttt = glm::mat4(1.0f);
 
 
-	//for (int i = 0; i < myBone.size(); i++)
-	//	cout << myBone[i]->GetBoneName() << endl;
+				//if (j < 1) { //spine
+				//	//bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(1, 0, 0));
+				//	//bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(0, 1, 0));
+				//	//bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 0, 1));
+				//	bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
+				//	bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
+				//	bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
+				//}
+				//else if (j < 5) { //left leg
+				//	//bbb = glm::rotate(bbb, -glm::radians(x), glm::vec3(0, 0, 1));
+				//	//bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
+				//	//bbb = glm::rotate(bbb, -glm::radians(z), glm::vec3(0, 1, 0));
+				//	bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
+				//	bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(0, 1, 0));
+				//	bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(1, 0, 0));
+				//}
+				//else if (j < 9)	{ //right leg
+				//	//bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
+				//	//bbb = glm::rotate(bbb, -glm::radians(y), glm::vec3(1, 0, 0));
+				//	//bbb = glm::rotate(bbb, -glm::radians(z), glm::vec3(0, 1, 0));
+				//	bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
+				//	bbb = glm::rotate(bbb, -glm::radians(y), glm::vec3(0, 1, 0));
+				//	bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(1, 0, 0));
 
-	for (int i = 0; i < 3; i++) {
+				//}
+				//else if (j < 11) { //spine
+				//	//bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(1, 0, 0));
+				//	//bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(0, 1, 0));
+				//	//bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 0, 1));
+				//	bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
+				//	bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
+				//	bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
+				//}
+				//else if (j < 15) { //left arm
+				//	//bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(1, 0, 0));
+				//	//bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(0, 1, 0));
+				//	//bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 0, 1));
+				//	bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
+				//	bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(0, 1, 0));
+				//	bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(1, 0, 0));
 
-		if (i == 0)
-			file = std::ifstream("Anson.txt");
-		else if (i == 1)
-			file = std::ifstream("Jonathan.txt");
-		else
-			file = std::ifstream("Stephan.txt");
-		int k = 0;
-		while (std::getline(file, str))
-		{
-			float x, y, z;
-			size_t pos = 0;
-			string token;
-			string delimiter = " "; pos = str.find(delimiter); token = str.substr(0, pos); str.erase(0, pos + delimiter.length());
-			for (int j = 0; j < 14; j++)
-			{
+				//}
+				//else if (j < 19) { //right arm
+				//	//bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
+				//	//bbb = glm::rotate(bbb, -glm::radians(y), glm::vec3(1, 0, 0));
+				//	//bbb = glm::rotate(bbb, -glm::radians(z), glm::vec3(0, 1, 0));
+				//	bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
+				//	bbb = glm::rotate(bbb, -glm::radians(y), glm::vec3(0, 1, 0));
+				//	bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(1, 0, 0));
 
-
-				delimiter = "  "; pos = str.find(delimiter); token = str.substr(0, pos); x = stof(str); str.erase(0, pos + delimiter.length());
-				delimiter = "  "; pos = str.find(delimiter); token = str.substr(0, pos); y = stof(str); str.erase(0, pos + delimiter.length());
-				delimiter = " "; pos = str.find(delimiter); token = str.substr(0, pos); z = stof(str); str.erase(0, pos + delimiter.length());
-
-				//Setup rotation for each joint based on different orientation
-				
-				if (k % 4 == 0) { //cause orignial file is 120hz, I reduce it to 30hz
-					glm::mat4 bbb; bbb = glm::mat4(1.0f);
-
-
-					if (j < 6) { //spine
-						bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(1, 0, 0));
-						bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(0, 1, 0));
-						bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 0, 1));
-					}
-					else if (j < 10) { //left
-						bbb = glm::rotate(bbb, -glm::radians(x), glm::vec3(0, 0, 1));
-						bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
-						bbb = glm::rotate(bbb, -glm::radians(z), glm::vec3(0, 1, 0));
-					}
-					else { //right
-						bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
-						bbb = glm::rotate(bbb, -glm::radians(y), glm::vec3(1, 0, 0));
-						bbb = glm::rotate(bbb, -glm::radians(z), glm::vec3(0, 1, 0));
-					}
+				//}
 
 
-					//cout << "bbb: " << glm::to_string(bbb) << endl;
-					if (i == 0)
-						myBone1[j]->setRotation(bbb);
-					else if (i == 1)
-						myBone2[j]->setRotation(bbb);
-					else
-						myBone3[j]->setRotation(bbb);
+				bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
+				bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
+				bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
+
+				if (j < 19)
+				{
+					newBone[j]->setRotation(bbb);
+					//newBone[j]->setPosition(glm::vec3(0, 0, 0));
 				}
 
-				
-			}
 
-			k++;
+
+
+				//cout << "bbb: " << glm::to_string(bbb) << endl;
+				//if (i == 0)
+				//	myBone1[j]->setRotation(bbb);
+				//else if (i == 1)
+				//	myBone2[j]->setRotation(bbb);
+				//else
+				//	myBone3[j]->setRotation(bbb);
+
+
+
+
+
+			}
 		}
+		k++;
 	}
-	cout << "bone1s' size:" << myBone1[0]->get_all_rotation().size() << endl;
-	cout << "bone2s' size:" << myBone2[0]->get_all_rotation().size() << endl;
-	cout << "bone3s' size:" << myBone3[0]->get_all_rotation().size() << endl;
+	cout << "finished loading person1.txt" << endl;
 
 	//std::ifstream Anson("Anson.txt");
 	//std::string str;
@@ -640,13 +773,20 @@ int main()
 	//	
 
 	//}
+	for (int k = 0; k < 3; k++) {
+		for (int i = 0; i < 19; i++)
+		{
+			cout << "bone" << i << ": " << glm::to_string(newBone[i]->get_current_rotation()) << endl;
+		}
+	}
+
 
 	// render loop
 	// -----------
 	while (!glfwWindowShouldClose(window))
 	{
-		
-		
+
+
 
 		// per-frame time logic
 		// --------------------
@@ -658,10 +798,10 @@ int main()
 		// input
 		// -----
 		processInput(window);
-
 		person1_animator.UpdateAnimation(frame);
-		person2_animator.UpdateAnimation(frame);
-		person3_animator.UpdateAnimation(frame);
+
+		//person2_animator.UpdateAnimation(frame);
+		//person3_animator.UpdateAnimation(frame);
 
 		// render
 		// ------
@@ -730,101 +870,101 @@ int main()
 			person1Shader.setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms1[i]);
 
 		}
-		
+
 		// render the loaded model
 		glm::mat4 person1_model = glm::mat4(1.0f);
 		person1_model = glm::translate(person1_model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-		person1_model = glm::scale(person1_model, glm::vec3(character_scale*2));	// it's a bit too big for our scene, so scale it down
+		person1_model = glm::scale(person1_model, glm::vec3(character_scale * 2));	// it's a bit too big for our scene, so scale it down
 		person1Shader.setMat4("model", person1_model);
 		person1.Draw(person1Shader);
 
 
-		person2Shader.use();
-		person2Shader.setMat4("projection", projection);
-		person2Shader.setMat4("view", view);
-		auto transforms2 = person2_animator.GetPoseTransforms();
-		for (int i = 0; i < transforms2.size(); ++i)
-			person2Shader.setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms2[i]);
+		//person2Shader.use();
+		//person2Shader.setMat4("projection", projection);
+		//person2Shader.setMat4("view", view);
+		//auto transforms2 = person2_animator.GetPoseTransforms();
+		//for (int i = 0; i < transforms2.size(); ++i)
+		//	person2Shader.setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms2[i]);
 
 
-		// render the loaded model
-		glm::mat4 person2_model = glm::mat4(1.0f);
-		person2_model = glm::translate(person2_model, glm::vec3(1.0f, 0.0f, 1.732f)); // translate it down so it's at the center of the scene
-		person2_model = glm::rotate(person2_model, glm::radians(-120.0f), glm::vec3(0.0, 1.0, 0.0));
-		person2_model = glm::scale(person2_model, glm::vec3(character_scale*2));	// it's a bit too big for our scene, so scale it down
-		person2Shader.setMat4("model", person2_model);
-		person2.Draw(person2Shader);
+		//// render the loaded model
+		//glm::mat4 person2_model = glm::mat4(1.0f);
+		//person2_model = glm::translate(person2_model, glm::vec3(1.0f, 0.0f, 1.732f)); // translate it down so it's at the center of the scene
+		//person2_model = glm::rotate(person2_model, glm::radians(-120.0f), glm::vec3(0.0, 1.0, 0.0));
+		//person2_model = glm::scale(person2_model, glm::vec3(character_scale*2));	// it's a bit too big for our scene, so scale it down
+		//person2Shader.setMat4("model", person2_model);
+		//person2.Draw(person2Shader);
 
-		person3Shader.use();
-		person3Shader.setMat4("projection", projection);
-		person3Shader.setMat4("view", view);
-		auto transforms3 = person3_animator.GetPoseTransforms();
-		for (int i = 0; i < transforms3.size(); ++i)
-			person3Shader.setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms3[i]);
-
-
-		// render the loaded model
-		glm::mat4 person3_model = glm::mat4(1.0f);
-		person3_model = glm::translate(person3_model, glm::vec3(-1.0f, 0.0f, 1.732f)); // translate it down so it's at the center of the scene
-		person3_model = glm::rotate(person3_model, glm::radians(120.0f), glm::vec3(0.0, 1.0, 0.0));
-		person3_model = glm::scale(person3_model, glm::vec3(character_scale*2));	// it's a bit too big for our scene, so scale it down
-		person3Shader.setMat4("model", person3_model);
-		person3.Draw(person3Shader);
+		//person3Shader.use();
+		//person3Shader.setMat4("projection", projection);
+		//person3Shader.setMat4("view", view);
+		//auto transforms3 = person3_animator.GetPoseTransforms();
+		//for (int i = 0; i < transforms3.size(); ++i)
+		//	person3Shader.setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms3[i]);
 
 
-		////draw eye line
-		eyeShader.use();
-		eyeShader.setMat4("projection", projection);
-		eyeShader.setMat4("view", view);
-		glLineWidth(5);
+		//// render the loaded model
+		//glm::mat4 person3_model = glm::mat4(1.0f);
+		//person3_model = glm::translate(person3_model, glm::vec3(-1.0f, 0.0f, 1.732f)); // translate it down so it's at the center of the scene
+		//person3_model = glm::rotate(person3_model, glm::radians(120.0f), glm::vec3(0.0, 1.0, 0.0));
+		//person3_model = glm::scale(person3_model, glm::vec3(character_scale*2));	// it's a bit too big for our scene, so scale it down
+		//person3Shader.setMat4("model", person3_model);
+		//person3.Draw(person3Shader);
 
-		glm::mat4 eyeAngle = glm::mat4(1.0f);
-		//eye_angle temp = eye1.front(); eye1.pop();
-		eye_angle temp = eye1[frame];
-		eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.x), glm::vec3(0.0f, 1.0f, 0.0f));
-		eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.y), glm::vec3(1.0f, 0.0f, 0.0f));
-		glm::mat4 model_eye_angle = glm::mat4(1.0f);
-		model_eye_angle = glm::translate(model_eye_angle, glm::vec3(0.0f, eye_height, 0.0f));
-		model_eye_angle = glm::scale(model_eye_angle, glm::vec3(character_scale * 2));
-		eyeShader.setMat4("eye_angle", eyeAngle);
-		eyeShader.setMat4("headMatrix", myBone1[5]->get_current_rotation());
-		eyeShader.setMat4("model", model_eye_angle);
-		eyeShader.setVec4("color", axisZColor); //red
-		glBindVertexArray(lineZVAO);
-		glDrawArrays(GL_LINES, 0, 2);
 
-		eyeAngle = glm::mat4(1.0f);
-		//temp = eye2.front(); eye2.pop();
-		temp = eye2[frame];
-		eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.x), glm::vec3(0.0f, 1.0f, 0.0f));
-		eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.y), glm::vec3(1.0f, 0.0f, 0.0f));
-		model_eye_angle = glm::mat4(1.0f);
-		model_eye_angle = glm::translate(model_eye_angle, glm::vec3(1.0f, eye_height, 1.732f));
-		model_eye_angle = glm::rotate(model_eye_angle, glm::radians(-120.0f), glm::vec3(0.0, 1.0, 0.0));
-		model_eye_angle = glm::scale(model_eye_angle, glm::vec3(character_scale * 2));
-		eyeShader.setMat4("eye_angle", eyeAngle);
-		eyeShader.setMat4("headMatrix", myBone2[5]->get_current_rotation());
-		eyeShader.setMat4("model", model_eye_angle);
-		eyeShader.setVec4("color", axisZColor); //red
-		glBindVertexArray(lineZVAO);
-		glDrawArrays(GL_LINES, 0, 2);
+		//////draw eye line
+		//eyeShader.use();
+		//eyeShader.setMat4("projection", projection);
+		//eyeShader.setMat4("view", view);
+		//glLineWidth(5);
 
-		eyeAngle = glm::mat4(1.0f);
-		//temp = eye3.front(); eye3.pop();
-		temp = eye3[frame];
-		eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.x), glm::vec3(0.0f, 1.0f, 0.0f));
-		eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.y), glm::vec3(1.0f, 0.0f, 0.0f));
+		//glm::mat4 eyeAngle = glm::mat4(1.0f);
+		////eye_angle temp = eye1.front(); eye1.pop();
+		//eye_angle temp = eye1[frame];
+		//eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.x), glm::vec3(0.0f, 1.0f, 0.0f));
+		//eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.y), glm::vec3(1.0f, 0.0f, 0.0f));
+		//glm::mat4 model_eye_angle = glm::mat4(1.0f);
+		//model_eye_angle = glm::translate(model_eye_angle, glm::vec3(0.0f, eye_height, 0.0f));
+		//model_eye_angle = glm::scale(model_eye_angle, glm::vec3(character_scale * 2));
+		//eyeShader.setMat4("eye_angle", eyeAngle);
+		//eyeShader.setMat4("headMatrix", myBone1[5]->get_current_rotation());
+		//eyeShader.setMat4("model", model_eye_angle);
+		//eyeShader.setVec4("color", axisZColor); //red
+		//glBindVertexArray(lineZVAO);
+		//glDrawArrays(GL_LINES, 0, 2);
 
-		model_eye_angle = glm::mat4(1.0f);
-		model_eye_angle = glm::translate(model_eye_angle, glm::vec3(-1.0f, eye_height, 1.732f));
-		model_eye_angle = glm::rotate(model_eye_angle, glm::radians(120.0f), glm::vec3(0.0, 1.0, 0.0));
-		model_eye_angle = glm::scale(model_eye_angle, glm::vec3(character_scale * 2));
-		eyeShader.setMat4("eye_angle", eyeAngle);
-		eyeShader.setMat4("headMatrix", myBone3[5]->get_current_rotation());
-		eyeShader.setMat4("model", model_eye_angle);
-		eyeShader.setVec4("color", axisZColor); //red
-		glBindVertexArray(lineZVAO);
-		glDrawArrays(GL_LINES, 0, 2);
+		//eyeAngle = glm::mat4(1.0f);
+		////temp = eye2.front(); eye2.pop();
+		//temp = eye2[frame];
+		//eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.x), glm::vec3(0.0f, 1.0f, 0.0f));
+		//eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.y), glm::vec3(1.0f, 0.0f, 0.0f));
+		//model_eye_angle = glm::mat4(1.0f);
+		//model_eye_angle = glm::translate(model_eye_angle, glm::vec3(1.0f, eye_height, 1.732f));
+		//model_eye_angle = glm::rotate(model_eye_angle, glm::radians(-120.0f), glm::vec3(0.0, 1.0, 0.0));
+		//model_eye_angle = glm::scale(model_eye_angle, glm::vec3(character_scale * 2));
+		//eyeShader.setMat4("eye_angle", eyeAngle);
+		//eyeShader.setMat4("headMatrix", myBone2[5]->get_current_rotation());
+		//eyeShader.setMat4("model", model_eye_angle);
+		//eyeShader.setVec4("color", axisZColor); //red
+		//glBindVertexArray(lineZVAO);
+		//glDrawArrays(GL_LINES, 0, 2);
+
+		//eyeAngle = glm::mat4(1.0f);
+		////temp = eye3.front(); eye3.pop();
+		//temp = eye3[frame];
+		//eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.x), glm::vec3(0.0f, 1.0f, 0.0f));
+		//eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.y), glm::vec3(1.0f, 0.0f, 0.0f));
+
+		//model_eye_angle = glm::mat4(1.0f);
+		//model_eye_angle = glm::translate(model_eye_angle, glm::vec3(-1.0f, eye_height, 1.732f));
+		//model_eye_angle = glm::rotate(model_eye_angle, glm::radians(120.0f), glm::vec3(0.0, 1.0, 0.0));
+		//model_eye_angle = glm::scale(model_eye_angle, glm::vec3(character_scale * 2));
+		//eyeShader.setMat4("eye_angle", eyeAngle);
+		//eyeShader.setMat4("headMatrix", myBone3[5]->get_current_rotation());
+		//eyeShader.setMat4("model", model_eye_angle);
+		//eyeShader.setVec4("color", axisZColor); //red
+		//glBindVertexArray(lineZVAO);
+		//glDrawArrays(GL_LINES, 0, 2);
 
 		// draw skybox as last
 		glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
@@ -856,7 +996,7 @@ int main()
 		}
 		frame++;
 	}
-	
+
 	// Cleanup
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();

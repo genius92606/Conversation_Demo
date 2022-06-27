@@ -28,7 +28,7 @@ public:
 		{
 			//m_CurrentTime += m_CurrentAnimation->GetTicksPerSecond() * frame;
 			//m_CurrentTime = fmod(m_CurrentTime, m_CurrentAnimation->GetDuration());
-			CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f),frame);
+			CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f), frame);
 		}
 	}
 
@@ -48,19 +48,35 @@ public:
 		if (Bone)
 		{
 
-				
 			if (nodeName.compare("mixamorig_Head") == 0 || nodeName.compare("Head") == 0)
 				//Bone->Update(m_CurrentTime);
 				Bone->Update_fromFile(frame);
 			//else if (nodeName.compare("Hips") == 0)
-			//	Bone->Update_fromFile();
-			else if (nodeName.compare("Spine") == 0)
-				Bone->Update_fromFile(frame);
+				//Bone->Update_fromFile(frame);
+				//Bone->Update_without_rotation();
+			//else if (nodeName.compare("Spine") == 0)
+			//	Bone->Update_fromFile(frame);
 			else if (nodeName.compare("Spine1") == 0)
 				Bone->Update_fromFile(frame);
-			else if (nodeName.compare("Spine2") == 0)
+			//else if (nodeName.compare("Spine2") == 0)
+			//	Bone->Update_fromFile(frame);
+			//else if (nodeName.compare("Neck") == 0)
+			//	Bone->Update_fromFile(frame);
+			else if (nodeName.compare("LeftUpLeg") == 0)
 				Bone->Update_fromFile(frame);
-			else if (nodeName.compare("Neck") == 0)
+			else if (nodeName.compare("LeftLeg") == 0)
+				Bone->Update_fromFile(frame);
+			else if (nodeName.compare("LeftFoot") == 0)
+				Bone->Update_fromFile(frame);
+			else if (nodeName.compare("LeftToeBase") == 0)
+				Bone->Update_fromFile(frame);
+			else if (nodeName.compare("RightUpLeg") == 0)
+				Bone->Update_fromFile(frame);
+			else if (nodeName.compare("RightLeg") == 0)
+				Bone->Update_fromFile(frame);
+			else if (nodeName.compare("RightFoot") == 0)
+				Bone->Update_fromFile(frame);
+			else if (nodeName.compare("RightToeBase") == 0)
 				Bone->Update_fromFile(frame);
 			else if (nodeName.compare("LeftShoulder") == 0)
 				Bone->Update_fromFile(frame);
@@ -104,10 +120,10 @@ public:
 			//	Bone->Update_fromFile_right_arms();
 			//else if (nodeName.compare("mixamorig_RightHand") == 0)
 			//	Bone->Update_fromFile_right_arms();
-			else 
+			else
 				Bone->Update_without_rotation(m_CurrentTime);
 			nodeTransform = Bone->GetLocalTransform();
-			
+
 		}
 
 		glm::mat4 globalTransformation = parentTransform * nodeTransform;
@@ -121,7 +137,7 @@ public:
 		}
 
 		for (int i = 0; i < node->childrenCount; i++)
-			CalculateBoneTransform(&node->children[i], globalTransformation,frame);
+			CalculateBoneTransform(&node->children[i], globalTransformation, frame);
 	}
 
 	std::vector<glm::mat4> GetPoseTransforms()

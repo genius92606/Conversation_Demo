@@ -52,8 +52,8 @@ public:
 			if (nodeName.compare("mixamorig_Head") == 0 || nodeName.compare("Head") == 0)
 				//Bone->Update(m_CurrentTime);
 				Bone->Update_fromFile(frame);
-			//else if (nodeName.compare("Hips") == 0)
-			//	Bone->Update_fromFile(frame);
+			else if (nodeName.compare("Hips") == 0)
+				Bone->Update_fromFile(frame);
 				//Bone->Update_without_rotation();
 			//else if (nodeName.compare("Spine") == 0)
 			//	Bone->Update_fromFile(frame);

@@ -72,6 +72,9 @@ struct eye_angle {
 };
 float eye_height = 1.659;
 
+
+float inix, iniy, iniz;
+
 using namespace std;
 
 
@@ -620,9 +623,10 @@ int main()
 
 	std::ifstream file;
 	std::string str;
-	file = ifstream("person3.txt");
+	file = ifstream("person1.txt");
 	cout << "start loading person1.txt" << endl;
 	int k = 0;
+	
 	while (std::getline(file, str))
 	{
 		float x, y, z;
@@ -636,17 +640,20 @@ int main()
 			delimiter = " "; pos = str.find(delimiter); token = str.substr(0, pos); x = stof(str); str.erase(0, pos + delimiter.length());
 			delimiter = " "; pos = str.find(delimiter); token = str.substr(0, pos); y = stof(str); str.erase(0, pos + delimiter.length());
 			delimiter = " "; pos = str.find(delimiter); token = str.substr(0, pos); z = stof(str); str.erase(0, pos + delimiter.length());
-			//cout << j << ":" << x << " " << y << " " << z << endl;
+			
 			//Setup rotation for each joint based on different orientation
 
 			if (k % 2 == 0) { //cause orignial file is 60hz, I reduce it to 30hz
 				glm::mat4 bbb; bbb = glm::mat4(1.0f);
 				glm::mat4 ttt; ttt = glm::mat4(1.0f);
-				if (j == 0) //left arm
+				if (j == 0) 
 				{
+					if(k==0){
+						inix = x; iniy = y; iniz = z;
+					}
 					bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
 					bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
-					//bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
+					bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
 				}
 				else if (j == 12) //left arm
 				{
@@ -657,19 +664,19 @@ int main()
 				else if (j == 13) //left forearm
 				{
 					bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
-					bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
+					bbb = glm::rotate(bbb, glm::radians(y+25), glm::vec3(1, 0, 0));
 					bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
 				}
 				else if (j == 16) //right arm
 				{
-					bbb = glm::rotate(bbb, glm::radians(x + 90), glm::vec3(0, 0, 1));
+					bbb = glm::rotate(bbb, glm::radians(x + 90.f), glm::vec3(0, 0, 1));
 					bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
-					bbb = glm::rotate(bbb, glm::radians(z + 10), glm::vec3(0, 1, 0));
+					bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
 				}
 				else if (j == 17) //right forearm
 				{
 					bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
-					bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
+					bbb = glm::rotate(bbb, glm::radians(y+25), glm::vec3(1, 0, 0));
 					bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
 				}
 				else
@@ -683,9 +690,10 @@ int main()
 				{
 					newBone[j]->setRotation(bbb);
 					//newBone[j]->setPosition(glm::vec3(0, 0, 0));
+					//cout << newBone[j]->GetBoneName() << ", x:" << x << ", y:" << y << ", z:" << z << endl;
 				}
 
-
+				
 
 
 				//cout << "bbb: " << glm::to_string(bbb) << endl;
@@ -852,6 +860,7 @@ int main()
 		// render the loaded model
 		glm::mat4 person1_model = glm::mat4(1.0f);
 		person1_model = glm::translate(person1_model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+		person1_model = glm::rotate(person1_model, glm::radians(-iniz), glm::vec3(0.0, 1.0, 0.0));
 		person1_model = glm::scale(person1_model, glm::vec3(character_scale * 2));	// it's a bit too big for our scene, so scale it down
 		person1Shader.setMat4("model", person1_model);
 		person1.Draw(person1Shader);

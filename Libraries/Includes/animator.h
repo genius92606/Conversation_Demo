@@ -12,6 +12,7 @@
 class Animator
 {
 public:
+	Animator() = default;
 	Animator(Animation* current)
 	{
 		m_CurrentAnimation = current;

@@ -11,13 +11,13 @@ d:\conversation_demo\libraries\includes\animation.h(56): warning C4244: 'return'
 d:\conversation_demo\libraries\includes\animation.h(99): warning C4018: '<': signed/unsigned mismatch
 d:\conversation_demo\demo\main.cpp(61): warning C4305: 'initializing': truncation from 'double' to 'float'
 d:\conversation_demo\demo\main.cpp(73): warning C4305: 'initializing': truncation from 'double' to 'float'
-d:\conversation_demo\demo\main.cpp(779): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(1034): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(1035): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(1039): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(1040): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(1042): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(1043): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(1052): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\demo\main.cpp(1073): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\demo\main.cpp(1345): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\demo\main.cpp(1346): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\demo\main.cpp(1350): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\demo\main.cpp(1351): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\demo\main.cpp(1353): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\demo\main.cpp(1354): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\demo\main.cpp(1363): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 d:\conversation_demo\libraries\includes\bone.h(172): warning C4715: 'Bone::GetScaleIndex': not all control paths return a value
   Demo.vcxproj -> D:\Conversation_Demo\x64\Debug\Demo.exe

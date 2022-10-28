@@ -12,6 +12,12 @@
 #include <glm/gtx/quaternion.hpp>
 #include <assimp_glm_helpers.h>
 
+struct eye_gaze
+{
+	float horizontal;
+	float vertical;
+};
+
 struct KeyPosition
 {
 	glm::vec3 position;

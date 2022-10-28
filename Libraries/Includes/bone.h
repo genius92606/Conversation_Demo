@@ -199,6 +199,9 @@ public:
 	std::vector<glm::mat4> get_all_rotation() {
 		return file_Rotations;
 	}
+	int size() {
+		return file_Rotations.size();
+	}
 
 private:
 

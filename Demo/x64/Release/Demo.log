@@ -1,8 +1,9 @@
 ﻿  main.cpp
 d:\conversation_demo\libraries\includes\shader.h(56): warning C4101: 'e': unreferenced local variable
-d:\conversation_demo\libraries\includes\bone.h(47): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\libraries\includes\bone.h(58): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\libraries\includes\bone.h(69): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\libraries\includes\bone.h(53): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\libraries\includes\bone.h(64): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\libraries\includes\bone.h(75): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\libraries\includes\bone.h(203): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
 d:\conversation_demo\libraries\includes\mesh.h(93): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
 d:\conversation_demo\libraries\includes\model_animation.h(184): warning C4018: '<': signed/unsigned mismatch
 d:\conversation_demo\libraries\includes\animation.h(31): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
@@ -11,16 +12,21 @@ d:\conversation_demo\libraries\includes\animation.h(56): warning C4244: 'return'
 d:\conversation_demo\libraries\includes\animation.h(99): warning C4018: '<': signed/unsigned mismatch
 d:\conversation_demo\demo\main.cpp(60): warning C4305: 'initializing': truncation from 'double' to 'float'
 d:\conversation_demo\demo\main.cpp(72): warning C4305: 'initializing': truncation from 'double' to 'float'
-d:\conversation_demo\demo\main.cpp(868): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(1133): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(1134): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(1138): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(1139): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(1141): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(1142): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(1151): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\demo\main.cpp(540): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\demo\main.cpp(648): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+d:\conversation_demo\demo\main.cpp(778): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\demo\main.cpp(779): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\demo\main.cpp(783): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\demo\main.cpp(784): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\demo\main.cpp(786): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\demo\main.cpp(787): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\demo\main.cpp(796): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   Generating code
-  1 of 3858 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  1 of 4020 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     4 functions had inline decision re-evaluated but remain unchanged
   Finished generating code

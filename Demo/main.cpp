@@ -71,6 +71,10 @@ struct eye_angle {
 };
 float eye_height = 1.659;
 
+vector<vector<eye_angle> > eye_angles;
+
+
+
 //Interlocutor position properties
 vector<glm::vec3> initPosition;
 std::vector<glm::vec3> Sample_Positions[5];
@@ -86,6 +90,8 @@ using namespace std;
 
 //frame properties
 int frame = 0;
+int frames = 100000;
+
 
 void Gui() {
 	// Start the Dear ImGui frame
@@ -118,7 +124,7 @@ void Gui() {
 		//if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
 		//	counter++;
 		ImGui::SliderFloat("position scale", &position_scale, 100.0f, 1000.0f);
-		ImGui::SliderInt("frame", &frame, 0, 20000);
+		ImGui::SliderInt("frame", &frame, 0, frames-1);
 		//ImGui::Text("counter = %d", frame);
 
 
@@ -250,31 +256,7 @@ int main()
 	Shader normalShader("normal_vs.glsl", "normal_fs.glsl");
 	Shader eyeShader("eye_vs.glsl", "normal_fs.glsl");
 	Shader roomShader("model_loading.vs", "model_loading.fs");
-	// load models
-	// -----------
 
-	//Model person1("../Resources/person1/person1.dae"); 
-	//Animation person1_animation("../Resources/person1/person1.dae", &person1);
-	//Animator person1_animator(&person1_animation);
-
-	//Model person2("../Resources/person2/person2.dae");
-	//Animation person2_animation("../Resources/person2/person2.dae", &person2);
-	//Animator person2_animator(&person2_animation);
-
-	
-	
-	
-
-	//Model person1("../Resources/male3/male3.dae");
-	//Animation person1_animation("../Resources/male3/male3.dae", &person1);
-	//Animator person1_animator(&person1_animation);
-
-	////Model person2("../Resources/male3/male3.dae");
-	//Animation person2_animation("../Resources/male3/male3.dae", &person1);
-	//Animator person2_animator(&person2_animation);
-	////Model person3("../Resources/male3/male3.dae");
-	////Animation person3_animation("../Resources/male3/male3.dae", &person3);
-	////Animator person3_animator(&person3_animation);
 
 	Model room("../Resources/big-room/Room.obj");
 
@@ -398,43 +380,17 @@ int main()
 	skyboxShader.use();
 	skyboxShader.setInt("skybox", 0);
 
+	
 
 	//for (int i = 0; i < (&person1_animation)->getBones().size(); i++)
 	//	cout << (&person1_animation)->getBones()[i].GetBoneName() << endl;
 
 	
-	
-	
-	
 
-
-	//vector<Bone*> newBone; //19 bones
-	//newBone.push_back((&person1_animation)->FindBone("Hips"));
-	//newBone.push_back((&person1_animation)->FindBone("LeftUpLeg")); newBone.push_back((&person1_animation)->FindBone("LeftLeg"));
-	//newBone.push_back((&person1_animation)->FindBone("LeftFoot")); newBone.push_back((&person1_animation)->FindBone("LeftToeBase"));
-	//newBone.push_back((&person1_animation)->FindBone("RightUpLeg")); newBone.push_back((&person1_animation)->FindBone("RightLeg"));
-	//newBone.push_back((&person1_animation)->FindBone("RightFoot")); newBone.push_back((&person1_animation)->FindBone("RightToeBase"));
-	//newBone.push_back((&person1_animation)->FindBone("Spine1")); newBone.push_back((&person1_animation)->FindBone("Head"));
-	//newBone.push_back((&person1_animation)->FindBone("LeftShoulder")); newBone.push_back((&person1_animation)->FindBone("LeftArm"));
-	//newBone.push_back((&person1_animation)->FindBone("LeftForeArm")); newBone.push_back((&person1_animation)->FindBone("LeftHand"));
-	//newBone.push_back((&person1_animation)->FindBone("RightShoulder")); newBone.push_back((&person1_animation)->FindBone("RightArm"));
-	//newBone.push_back((&person1_animation)->FindBone("RightForeArm")); newBone.push_back((&person1_animation)->FindBone("RightHand"));
-
-
-	//vector<Bone*> newBone2; //19 bones
-	//newBone2.push_back((&person2_animation)->FindBone("Hips"));
-	//newBone2.push_back((&person2_animation)->FindBone("LeftUpLeg")); newBone2.push_back((&person2_animation)->FindBone("LeftLeg"));
-	//newBone2.push_back((&person2_animation)->FindBone("LeftFoot")); newBone2.push_back((&person2_animation)->FindBone("LeftToeBase"));
-	//newBone2.push_back((&person2_animation)->FindBone("RightUpLeg")); newBone2.push_back((&person2_animation)->FindBone("RightLeg"));
-	//newBone2.push_back((&person2_animation)->FindBone("RightFoot")); newBone2.push_back((&person2_animation)->FindBone("RightToeBase"));
-	//newBone2.push_back((&person2_animation)->FindBone("Spine1")); newBone2.push_back((&person2_animation)->FindBone("Head"));
-	//newBone2.push_back((&person2_animation)->FindBone("LeftShoulder")); newBone2.push_back((&person2_animation)->FindBone("LeftArm"));
-	//newBone2.push_back((&person2_animation)->FindBone("LeftForeArm")); newBone2.push_back((&person2_animation)->FindBone("LeftHand"));
-	//newBone2.push_back((&person2_animation)->FindBone("RightShoulder")); newBone2.push_back((&person2_animation)->FindBone("RightArm"));
-	//newBone2.push_back((&person2_animation)->FindBone("RightForeArm")); newBone2.push_back((&person2_animation)->FindBone("RightHand"));
-
-	
 	vector<Bone*>* myBone = new vector<Bone*>[num_of_people];
+
+	// load models
+	// -----------
 
 	Model model("../Resources/male3/male3.dae");
 	Animation* animations = new Animation[num_of_people];
@@ -442,7 +398,8 @@ int main()
 
 
 
-	
+	// loading joints and eye-gaze angle
+	// ---------------------------------------------------------------------------
 	for (int i = 0; i < num_of_people; i++) {
 
 		animations[i] = Animation("../Resources/male3/male3.dae", &model);
@@ -459,7 +416,7 @@ int main()
 		myBone[i].push_back((&animations[i])->FindBone("RightShoulder")); myBone[i].push_back((&animations[i])->FindBone("RightArm"));
 		myBone[i].push_back((&animations[i])->FindBone("RightForeArm")); myBone[i].push_back((&animations[i])->FindBone("RightHand"));
 
-
+		//loading joints
 		ifstream file = ifstream("Session_" + to_string(session) + "_PC_" + to_string(i+1) + "_mocap_data.txt");
 		string str;
 		cout << "Loading pc " << i+1 << endl;
@@ -541,9 +498,34 @@ int main()
 			}
 			k++;
 		}
+		//determine frame
+		if (myBone[i][0]->size() < frames)
+			frames = myBone[i][0]->size();
+
+		//loading eye gaze
+		file = ifstream("Session_" + to_string(session) + "_PC_" + to_string(i + 1) + "_EyeTracker_data.txt");
+		str.clear();
+		string delimiter = " ";
+		vector<eye_angle> angle_temps;
+		while (std::getline(file, str))
+		{
+			eye_angle angle_temp;
+			size_t pos = 0;
+			string token;
+			pos = str.find(delimiter); token = str.substr(0, pos); angle_temp.x = stof(str); str.erase(0, pos + delimiter.length());
+			pos = str.find(delimiter); token = str.substr(0, pos); angle_temp.y = stof(str); str.erase(0, pos + delimiter.length());
+			
+			angle_temps.push_back(angle_temp);
+		}
+		eye_angles.push_back(angle_temps);
+
 	}
 	
 
+	auto yyy = (&animations[0])->GetBoneIDMap();
+	
+	cout << "head id: " << yyy["Head"].id << ", offset:" << glm::to_string(yyy["Head"].offset) << endl;
+	cout << "hips id:" << yyy["Hips"].id << ", offset:"<< glm::to_string(yyy["Hips"].offset) << endl;
 	
 
 	// render loop
@@ -567,8 +549,7 @@ int main()
 
 			animators[i].UpdateAnimation(frame);
 		}
-		//person1_animator.UpdateAnimation(frame);
-		//person2_animator.UpdateAnimation(frame);
+
 
 
 		// render
@@ -627,13 +608,15 @@ int main()
 
 		//////Draw People//////
 		
-		peopleShader.use();
-
-		// view/projection transformations
-		peopleShader.setMat4("projection", projection);
-		peopleShader.setMat4("view", view);
+		
 
 		for (int i = 0; i < num_of_people; i++) {
+
+			peopleShader.use();
+
+			// view/projection transformations
+			peopleShader.setMat4("projection", projection);
+			peopleShader.setMat4("view", view);
 
 			auto transforms = animators[i].GetPoseTransforms();
 			for (int k = 0; k < transforms.size(); ++k)
@@ -648,31 +631,35 @@ int main()
 			person1_model = glm::scale(person1_model, glm::vec3(character_scale));	// it's a bit too big for our scene, so scale it down
 			peopleShader.setMat4("model", person1_model);
 			model.Draw(peopleShader);
+
+			////draw eye line
+			eyeShader.use();
+			eyeShader.setMat4("projection", projection);
+			eyeShader.setMat4("view", view);
+			glLineWidth(5);
+
+			glm::mat4 eyeAngle = glm::mat4(1.0f);
+			//eye_angle temp = eye1.front(); eye1.pop();
+			eyeAngle = glm::rotate(eyeAngle, glm::radians(eye_angles[i][frame].x), glm::vec3(0.0f, 1.0f, 0.0f));
+			eyeAngle = glm::rotate(eyeAngle, glm::radians(eye_angles[i][frame].y), glm::vec3(1.0f, 0.0f, 0.0f));
+			glm::mat4 model_eye_angle = glm::mat4(1.0f);
+			model_eye_angle = glm::translate(model_eye_angle, Sample_Positions[i][frame] / position_scale);
+			model_eye_angle = glm::translate(model_eye_angle, glm::vec3(0.0f, eye_height, 0.0f));
+			model_eye_angle = glm::scale(model_eye_angle, glm::vec3(character_scale * 0.5));
+			eyeShader.setMat4("eye_angle", eyeAngle);
+			eyeShader.setMat4("hipsMatrix", myBone[i][0]->get_current_rotation()); //torso rotaion
+			eyeShader.setMat4("headMatrix", myBone[i][10]->get_current_rotation());  //head rotation
+			eyeShader.setMat4("model", model_eye_angle);
+			eyeShader.setVec4("color", axisZColor); //red
+			glBindVertexArray(lineZVAO);
+			glDrawArrays(GL_LINES, 0, 2);
+
 		}
 
 	
 
 
-		//////draw eye line
-		//eyeShader.use();
-		//eyeShader.setMat4("projection", projection);
-		//eyeShader.setMat4("view", view);
-		//glLineWidth(5);
-
-		//glm::mat4 eyeAngle = glm::mat4(1.0f);
-		////eye_angle temp = eye1.front(); eye1.pop();
-		//eye_angle temp = eye1[frame];
-		//eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.x), glm::vec3(0.0f, 1.0f, 0.0f));
-		//eyeAngle = glm::rotate(eyeAngle, -glm::radians(temp.y), glm::vec3(1.0f, 0.0f, 0.0f));
-		//glm::mat4 model_eye_angle = glm::mat4(1.0f);
-		//model_eye_angle = glm::translate(model_eye_angle, glm::vec3(0.0f, eye_height, 0.0f));
-		//model_eye_angle = glm::scale(model_eye_angle, glm::vec3(character_scale * 2));
-		//eyeShader.setMat4("eye_angle", eyeAngle);
-		//eyeShader.setMat4("headMatrix", myBone1[5]->get_current_rotation());
-		//eyeShader.setMat4("model", model_eye_angle);
-		//eyeShader.setVec4("color", axisZColor); //red
-		//glBindVertexArray(lineZVAO);
-		//glDrawArrays(GL_LINES, 0, 2);
+		
 
 		//eyeAngle = glm::mat4(1.0f);
 		////temp = eye2.front(); eye2.pop();

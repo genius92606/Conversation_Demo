@@ -70,6 +70,8 @@ struct eye_angle {
 	float y;
 };
 float eye_height = 1.659;
+float eye_front = 0.2;
+float eye_offset[3] = { 0.0f, 167.262, 10.06 };
 
 vector<vector<eye_angle> > eye_angles;
 
@@ -121,12 +123,14 @@ void Gui() {
 		ImGui::InputFloat("Room Scale", &roomScale);
 
 		ImGui::SliderFloat("eye height", &eye_height, 0.0f, 10.0f);
+		ImGui::SliderFloat("eye front", &eye_front, 0.0f, 10.0f);
 		//if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
 		//	counter++;
 		ImGui::SliderFloat("position scale", &position_scale, 100.0f, 1000.0f);
 		ImGui::SliderInt("frame", &frame, 0, frames-1);
 		//ImGui::Text("counter = %d", frame);
 
+		ImGui::InputFloat3("Eye offset", eye_offset);
 
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::End();
@@ -174,7 +178,7 @@ int main()
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	// comment if you don't want the cursor movement
-	//glfwSetCursorPosCallback(window, mouse_callback);
+	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 
 
@@ -382,8 +386,7 @@ int main()
 
 	
 
-	//for (int i = 0; i < (&person1_animation)->getBones().size(); i++)
-	//	cout << (&person1_animation)->getBones()[i].GetBoneName() << endl;
+	
 
 	
 
@@ -396,7 +399,7 @@ int main()
 	Animation* animations = new Animation[num_of_people];
 	Animator* animators = new Animator[num_of_people];
 
-
+	
 
 	// loading joints and eye-gaze angle
 	// ---------------------------------------------------------------------------
@@ -503,7 +506,7 @@ int main()
 			frames = myBone[i][0]->size();
 
 		//loading eye gaze
-		file = ifstream("Session_" + to_string(session) + "_PC_" + to_string(i + 1) + "_EyeTracker_data.txt");
+		file = ifstream("Session_" + to_string(session) + "_PC_" + to_string(i + 1) + "_EyeTracker_data_cleaned.txt");
 		str.clear();
 		string delimiter = " ";
 		vector<eye_angle> angle_temps;
@@ -525,8 +528,36 @@ int main()
 	auto yyy = (&animations[0])->GetBoneIDMap();
 	
 	cout << "head id: " << yyy["Head"].id << ", offset:" << glm::to_string(yyy["Head"].offset) << endl;
+	cout << "spine id:" << yyy["Spine1"].id << ", offset:" << glm::to_string(yyy["Spine1"].offset) << endl;
 	cout << "hips id:" << yyy["Hips"].id << ", offset:"<< glm::to_string(yyy["Hips"].offset) << endl;
-	
+
+
+	for (int i = 0; i < (&animations[0])->getBones().size(); i++)
+		cout << (&animations[0])->getBones()[i].GetBoneName() << endl;
+
+	auto dfs = (&animations[0])->getBones()[6].get_scales();
+	cout << "get scales: " << glm::to_string(dfs) << endl;
+
+	glm::mat4 temp = glm::mat4(1.0f);
+	temp = glm::scale(temp, glm::vec3(character_scale * 50));
+
+	cout << "scale: " << glm::to_string(temp) << endl;
+
+
+	auto see_mesh = model.meshes;
+	cout << "mesh size of model:" << see_mesh.size() << endl;
+	auto see_vertices = see_mesh[4].vertices;
+	cout << "vertices size for each mesh:" << see_vertices.size() << endl;
+	auto see_vertex = see_vertices[0];
+	cout << "Position: " << glm::to_string(see_vertex.Position) << endl;
+	cout << "bone ids: " << endl;
+	std::copy(std::begin(see_vertex.m_BoneIDs),
+		std::end(see_vertex.m_BoneIDs),
+		std::ostream_iterator<int>(std::cout, "\n"));
+	cout << "weights: "  << endl;
+	std::copy(std::begin(see_vertex.m_Weights),
+		std::end(see_vertex.m_Weights),
+		std::ostream_iterator<float>(std::cout, "\n"));
 
 	// render loop
 	// -----------
@@ -583,6 +614,7 @@ int main()
 		model_room = glm::scale(model_room, glm::vec3(roomScale, roomScale, roomScale));	// it's a bit too big for our scene, so scale it down
 		roomShader.setMat4("model", model_room);
 		room.Draw(roomShader);
+		
 
 		//draw axes
 		normalShader.use();
@@ -606,10 +638,11 @@ int main()
 		glBindVertexArray(lineYVAO);
 		glDrawArrays(GL_LINES, 0, 2);
 
-		//////Draw People//////
-		
+
 		
 
+		//////Draw People//////
+		
 		for (int i = 0; i < num_of_people; i++) {
 
 			peopleShader.use();
@@ -638,21 +671,29 @@ int main()
 			eyeShader.setMat4("view", view);
 			glLineWidth(5);
 
-			glm::mat4 eyeAngle = glm::mat4(1.0f);
-			//eye_angle temp = eye1.front(); eye1.pop();
-			eyeAngle = glm::rotate(eyeAngle, glm::radians(eye_angles[i][frame].x), glm::vec3(0.0f, 1.0f, 0.0f));
-			eyeAngle = glm::rotate(eyeAngle, glm::radians(eye_angles[i][frame].y), glm::vec3(1.0f, 0.0f, 0.0f));
 			glm::mat4 model_eye_angle = glm::mat4(1.0f);
 			model_eye_angle = glm::translate(model_eye_angle, Sample_Positions[i][frame] / position_scale);
 			model_eye_angle = glm::translate(model_eye_angle, glm::vec3(0.0f, eye_height, 0.0f));
-			model_eye_angle = glm::scale(model_eye_angle, glm::vec3(character_scale * 0.5));
+
+			glm::mat4 eyeAngle = glm::mat4(1.0f);
+			//eyeAngle = glm::translate(eyeAngle, glm::vec3(0.0f, 0.0f, eye_front));
+			eyeAngle = glm::rotate(eyeAngle, -glm::radians(eye_angles[i][frame].y), glm::vec3(1.0f, 0.0f, 0.0f));
+			eyeAngle = glm::rotate(eyeAngle, -glm::radians(eye_angles[i][frame].x), glm::vec3(0.0f, 1.0f, 0.0f));
+			
+			//glm::mat4 scaleonly = glm::mat4(1.0f);
+			//scaleonly = glm::scale(scaleonly, glm::vec3(character_scale * 10));
+			/*model_eye_angle = glm::scale(model_eye_angle, glm::vec3(character_scale * 100));*/
 			eyeShader.setMat4("eye_angle", eyeAngle);
-			eyeShader.setMat4("hipsMatrix", myBone[i][0]->get_current_rotation()); //torso rotaion
-			eyeShader.setMat4("headMatrix", myBone[i][10]->get_current_rotation());  //head rotation
+			eyeShader.setMat4("hipsMatrix", myBone[i][0]->get_all_rotation()[frame]); //torso rotaion
+			eyeShader.setMat4("spineMatrix", myBone[i][9]->get_all_rotation()[frame]);  //spine rotation
+			eyeShader.setMat4("headMatrix", myBone[i][10]->get_all_rotation()[frame]);  //head rotation
+			//eyeShader.setMat4("headtransform", transforms[2]); //head transform
 			eyeShader.setMat4("model", model_eye_angle);
-			eyeShader.setVec4("color", axisZColor); //red
+			//eyeShader.setMat4("scaleonly", scaleonly);
+			eyeShader.setVec4("color", axisZColor); //blue
 			glBindVertexArray(lineZVAO);
 			glDrawArrays(GL_LINES, 0, 2);
+
 
 		}
 

@@ -93,7 +93,7 @@ public:
 		glm::mat4 rotation = file_Rotations[frame];
 		//glm::mat4 rotation = file_Rotations.front(); //file_Rotations.pop(); 
 		//file_Rotations.erase(file_Rotations.begin());
-		glm::mat4 scale = glm::scale(glm::mat4(1.0f), m_Scales[0].scale);
+		glm::mat4 scale = glm::mat4(1.0f);
 		m_LocalTransform = translation * rotation * scale;
 	}
 	void Update_manually(glm::mat4 rotate)
@@ -111,30 +111,6 @@ public:
 		file_Rotations.erase(file_Rotations.begin());
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), m_Scales[0].scale);
 		m_LocalTransform = translation * rotation * rotate * scale;
-	}
-	void Update_fromFile_left_arms()
-	{
-		glm::mat4 arms(1.0f);
-		arms = glm::rotate(arms, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
-
-		auto arms_inverse = glm::inverse(arms);
-		glm::mat4 translation = glm::translate(glm::mat4(1.0f), m_Positions[0].position);
-		glm::mat4 rotation = file_Rotations.front(); //file_Rotations.pop(); 
-		file_Rotations.erase(file_Rotations.begin());
-		glm::mat4 scale = glm::scale(glm::mat4(1.0f), m_Scales[0].scale);
-		m_LocalTransform = translation * arms_inverse* rotation *arms * scale;
-	}
-	void Update_fromFile_right_arms()
-	{
-		glm::mat4 arms(1.0f);
-		arms = glm::rotate(arms, glm::radians(-90.0f), glm::vec3(0.0, 0.0, 1.0));
-
-		auto arms_inverse = glm::inverse(arms);
-		glm::mat4 translation = glm::translate(glm::mat4(1.0f), m_Positions[0].position);
-		glm::mat4 rotation = file_Rotations.front(); //file_Rotations.pop(); 
-		file_Rotations.erase(file_Rotations.begin());
-		glm::mat4 scale = glm::scale(glm::mat4(1.0f), m_Scales[0].scale);
-		m_LocalTransform = translation * arms_inverse* rotation *arms * scale;
 	}
 	void Update_without_rotation(float animationTime) {
 		glm::mat4 translation = glm::translate(glm::mat4(1.0f), m_Positions[0].position);
@@ -196,11 +172,18 @@ public:
 	glm::mat4 get_current_rotation() {
 		return file_Rotations.front();
 	}
+	glm::mat4 get_frame_rotation(int frame) {
+		return file_Rotations[frame];
+	}
 	std::vector<glm::mat4> get_all_rotation() {
 		return file_Rotations;
 	}
 	int size() {
 		return file_Rotations.size();
+	}
+	glm::vec3 get_scales() {
+
+		return m_Scales[0].scale;
 	}
 
 private:

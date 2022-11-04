@@ -23,7 +23,7 @@
 #include <assimp_glm_helpers.h>
 #include <animdata.h>
 
-using namespace std;
+//using namespace std;
 
 unsigned int TextureFromFile(const char *path, const string &directory, bool gamma = false);
 

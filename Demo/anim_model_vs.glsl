@@ -37,6 +37,4 @@ void main()
     gl_Position =  projection * viewModel * totalPosition;
 //	gl_Position =  projection * viewModel * vec4(pos, 1.0);
 	TexCoords = tex;
-
-
 }

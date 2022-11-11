@@ -69,19 +69,26 @@ struct eye_angle {
 	float x;
 	float y;
 };
-float eye_height = 1.659;
-float eye_front = 0.2;
-float eye_offset[3] = { 0.0f, 167.262, 10.06 };
+float eye_height = 1.667;
+float eye_front = 0.198;
+
 
 vector<vector<eye_angle> > eye_angles;
-
+bool show_eye = true;
 
 
 //Interlocutor position properties
 vector<glm::vec3> initPosition;
 std::vector<glm::vec3> Sample_Positions[5];
-float position_scale = 800.0f;
+float position_scale = 1000.0f;
+vector<glm::vec3> init_spine_position;
+std::vector<glm::vec3> allSpinePositions[5];
+vector<glm::vec3> init_head_position;
+std::vector<glm::vec3> allHeadPositions[5];
 
+float head_front = 0.1;
+
+vector<float> height_scale;
 
 int session = 1;
 int num_of_people = 3;
@@ -93,6 +100,11 @@ using namespace std;
 //frame properties
 int frame = 0;
 int frames = 100000;
+
+//sphere properties
+bool show_sphere = true;
+float sphere_scale = 0.2;
+
 
 
 void Gui() {
@@ -107,30 +119,29 @@ void Gui() {
 
 	// 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
 	{
-		static float f = 0.0f;
-
 
 		ImGui::Begin("Simple Window");                          // Create a window called "Hello, world!" and append into it.
 
 		ImGui::Text("Load different input");               // Display some text (you can use a format strings too)
-		ImGui::Checkbox("Eye direction line", &show_demo_window);      // Edit bools storing our window open/close state
-		ImGui::Checkbox("Eyeball", &show_another_window);
+		ImGui::Checkbox("Other funcstions", &show_demo_window);      // Edit bools storing our window open/close state
+		ImGui::Checkbox("Eye direction line", &show_eye);      
 
-		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-		ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+		ImGui::Checkbox("Head sphere", &show_sphere);
+
 
 		ImGui::InputFloat3("Room Position", roomPosition);
 		ImGui::InputFloat("Room Scale", &roomScale);
 
-		ImGui::SliderFloat("eye height", &eye_height, 0.0f, 10.0f);
-		ImGui::SliderFloat("eye front", &eye_front, 0.0f, 10.0f);
+		ImGui::SliderFloat("Sphere offset", &head_front, 0.0f, 2.0f);
+		ImGui::SliderFloat("Eye offset", &eye_front, 0.0f, 3.5f);
 		//if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
 		//	counter++;
 		ImGui::SliderFloat("position scale", &position_scale, 100.0f, 1000.0f);
 		ImGui::SliderInt("frame", &frame, 0, frames-1);
+
+		ImGui::InputFloat("Sphere Scale", &sphere_scale);
 		//ImGui::Text("counter = %d", frame);
 
-		ImGui::InputFloat3("Eye offset", eye_offset);
 
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::End();
@@ -178,7 +189,7 @@ int main()
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	// comment if you don't want the cursor movement
-	glfwSetCursorPosCallback(window, mouse_callback);
+	//glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 
 
@@ -263,6 +274,7 @@ int main()
 
 
 	Model room("../Resources/big-room/Room.obj");
+	Model sphere("../Resources/sphere/sphere.obj");
 
 	//cout << "finish loading all object and animation" << endl;
 
@@ -474,13 +486,27 @@ int main()
 						bbb = glm::rotate(bbb, glm::radians(y+25), glm::vec3(1, 0, 0));
 						bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
 					}
-					else if (j == 19)
+					else if (j == 19) //hip position
 					{
 						if (k == 0)
 							initPosition.push_back(glm::vec3(y, z, x));
 
 						Sample_Positions[i].push_back(glm::vec3(y,z - initPosition[i].y,x));
 	
+					}
+					else if (j == 20) //spine1 position
+					{
+						if (k == 0)
+							init_spine_position.push_back(glm::vec3(y, z, x));
+						allSpinePositions[i].push_back(glm::vec3(y, z, x));
+
+					}
+					else if (j == 21) //head position
+					{
+						if (k == 0)
+							init_head_position.push_back(glm::vec3(y, z, x));
+						allHeadPositions[i].push_back(glm::vec3(y, z, x));
+
 					}
 					else
 					{
@@ -505,8 +531,12 @@ int main()
 		if (myBone[i][0]->size() < frames)
 			frames = myBone[i][0]->size();
 
+		//Calculate the offset between real height and model height
+		height_scale.push_back(eye_height / ((initPosition[i].y + init_spine_position[i].y + init_head_position[i].y) /
+			position_scale));
+
 		//loading eye gaze
-		file = ifstream("Session_" + to_string(session) + "_PC_" + to_string(i + 1) + "_EyeTracker_data_cleaned.txt");
+		file = ifstream("Session_" + to_string(session) + "_PC_" + to_string(i + 1) + "_EyeTracker_data.txt");
 		str.clear();
 		string delimiter = " ";
 		vector<eye_angle> angle_temps;
@@ -558,6 +588,9 @@ int main()
 	std::copy(std::begin(see_vertex.m_Weights),
 		std::end(see_vertex.m_Weights),
 		std::ostream_iterator<float>(std::cout, "\n"));
+
+	//print out the initial head position of model (not related to our animation)
+	cout << "head position:" << glm::to_string(myBone[0][10]->getposition()[0].position) << endl;
 
 	// render loop
 	// -----------
@@ -614,6 +647,7 @@ int main()
 		model_room = glm::scale(model_room, glm::vec3(roomScale, roomScale, roomScale));	// it's a bit too big for our scene, so scale it down
 		roomShader.setMat4("model", model_room);
 		room.Draw(roomShader);
+
 		
 
 		//draw axes
@@ -628,16 +662,18 @@ int main()
 		model_axis = glm::scale(model_axis, glm::vec3(0.5f, 0.5f, 0.5f));
 		normalShader.setMat4("model", model_axis);
 
-		normalShader.setVec4("color", axisZColor); //red
+		normalShader.setVec4("color", axisZColor); //blue
 		glBindVertexArray(lineZVAO);
 		glDrawArrays(GL_LINES, 0, 2);
-		normalShader.setVec4("color", axisXColor); //blue
+		normalShader.setVec4("color", axisXColor); //red
 		glBindVertexArray(lineXVAO);
 		glDrawArrays(GL_LINES, 0, 2);
 		normalShader.setVec4("color", axisYColor); //green
 		glBindVertexArray(lineYVAO);
 		glDrawArrays(GL_LINES, 0, 2);
 
+		model_axis = glm::scale(model_axis, glm::vec3(1.0f));
+		normalShader.setMat4("model", model_axis);
 
 		
 
@@ -661,38 +697,76 @@ int main()
 			glm::mat4 person1_model = glm::mat4(1.0f);
 			person1_model = glm::translate(person1_model, Sample_Positions[i][frame] / position_scale); // translate it down so it's at the center of the scene
 			//person1_model = glm::translate(person1_model, glm::vec3(0.0, 0.0, 0.0));
-			person1_model = glm::scale(person1_model, glm::vec3(character_scale));	// it's a bit too big for our scene, so scale it down
+			person1_model = glm::scale(person1_model, glm::vec3(character_scale/ height_scale[i]));	// it's a bit too big for our scene, so scale it down
 			peopleShader.setMat4("model", person1_model);
 			model.Draw(peopleShader);
 
-			////draw eye line
-			eyeShader.use();
-			eyeShader.setMat4("projection", projection);
-			eyeShader.setMat4("view", view);
-			glLineWidth(5);
-
+			
+			//global hips position
 			glm::mat4 model_eye_angle = glm::mat4(1.0f);
 			model_eye_angle = glm::translate(model_eye_angle, Sample_Positions[i][frame] / position_scale);
-			model_eye_angle = glm::translate(model_eye_angle, glm::vec3(0.0f, eye_height, 0.0f));
-
-			glm::mat4 eyeAngle = glm::mat4(1.0f);
-			//eyeAngle = glm::translate(eyeAngle, glm::vec3(0.0f, 0.0f, eye_front));
-			eyeAngle = glm::rotate(eyeAngle, -glm::radians(eye_angles[i][frame].y), glm::vec3(1.0f, 0.0f, 0.0f));
-			eyeAngle = glm::rotate(eyeAngle, -glm::radians(eye_angles[i][frame].x), glm::vec3(0.0f, 1.0f, 0.0f));
+			model_eye_angle = glm::translate(model_eye_angle, glm::vec3(0.0f, initPosition[i].y / position_scale, 0.0f));
 			
-			//glm::mat4 scaleonly = glm::mat4(1.0f);
-			//scaleonly = glm::scale(scaleonly, glm::vec3(character_scale * 10));
-			/*model_eye_angle = glm::scale(model_eye_angle, glm::vec3(character_scale * 100));*/
-			eyeShader.setMat4("eye_angle", eyeAngle);
-			eyeShader.setMat4("hipsMatrix", myBone[i][0]->get_all_rotation()[frame]); //torso rotaion
-			eyeShader.setMat4("spineMatrix", myBone[i][9]->get_all_rotation()[frame]);  //spine rotation
-			eyeShader.setMat4("headMatrix", myBone[i][10]->get_all_rotation()[frame]);  //head rotation
-			//eyeShader.setMat4("headtransform", transforms[2]); //head transform
-			eyeShader.setMat4("model", model_eye_angle);
-			//eyeShader.setMat4("scaleonly", scaleonly);
-			eyeShader.setVec4("color", axisZColor); //blue
-			glBindVertexArray(lineZVAO);
-			glDrawArrays(GL_LINES, 0, 2);
+			//spine rotation relate to hip
+			glm::mat4 hipRotation = myBone[i][0]->get_all_rotation()[frame];
+			hipRotation = glm::translate(hipRotation, allSpinePositions[i][frame]  / position_scale);
+
+			//head rotation relate to spine
+			glm::mat4 spineRotation = myBone[i][9]->get_all_rotation()[frame];
+			spineRotation = glm::translate(spineRotation, allHeadPositions[i][frame]  / position_scale);
+
+			////draw eye line
+			if (show_eye)
+			{				
+				eyeShader.use();
+				eyeShader.setMat4("projection", projection);
+				eyeShader.setMat4("view", view);
+
+				//raw eye gaze anagle
+				glm::mat4 eyeAngle = glm::mat4(1.0f);
+				//eyeAngle = glm::translate(eyeAngle, glm::vec3(0.0f, 0.0f, eye_front));
+				eyeAngle = glm::rotate(eyeAngle, -glm::radians(eye_angles[i][frame].y), glm::vec3(1.0f, 0.0f, 0.0f));
+				eyeAngle = glm::rotate(eyeAngle, -glm::radians(eye_angles[i][frame].x), glm::vec3(0.0f, 1.0f, 0.0f));
+
+				//scale of eye gaze line
+				glm::mat4 scaleonly = glm::mat4(1.0f);
+				scaleonly = glm::scale(scaleonly, glm::vec3(character_scale * 0.5));
+
+				//eye position relate to head center
+				glm::mat4 eyeoffset = glm::mat4(1.0f);
+				eyeoffset = glm::translate(eyeoffset, glm::vec3(0.0f, 0.0f, eye_front));
+
+				eyeShader.setMat4("eye_angle", eyeAngle);
+				//eyeShader.setMat4("hipsMatrix", myBone[i][0]->get_all_rotation()[frame]); //hips rotaion
+				//eyeShader.setMat4("spineMatrix", myBone[i][9]->get_all_rotation()[frame]);  //spine rotation
+				eyeShader.setMat4("hipsMatrix", hipRotation); //hips rotaion
+				eyeShader.setMat4("spineMatrix", spineRotation);  //spine rotation
+				eyeShader.setMat4("headMatrix", myBone[i][10]->get_all_rotation()[frame]);  //head rotation
+				eyeShader.setMat4("eyefront", eyeoffset);
+				//eyeShader.setMat4("headtransform", transforms[2]); //head transform
+				eyeShader.setMat4("model", model_eye_angle);
+				eyeShader.setMat4("scaleonly", scaleonly);
+				eyeShader.setVec4("color", axisZColor); //blue
+				glLineWidth(5);
+				glBindVertexArray(lineZVAO);
+				glDrawArrays(GL_LINES, 0, 2);
+			}
+			
+
+			//draw sphere around head
+			if (show_sphere)
+			{
+				glm::mat4 sphere_model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, head_front));
+				sphere_model = glm::scale(sphere_model, glm::vec3(sphere_scale));
+				sphere_model = model_eye_angle * hipRotation * spineRotation* sphere_model;
+				normalShader.use();
+				normalShader.setMat4("projection", projection);
+				normalShader.setMat4("view", view);
+				normalShader.setMat4("model", sphere_model);
+				normalShader.setVec4("color", glm::vec4(0.0f,0.0f,0.0f,1.0f)); //black
+				sphere.Draw(normalShader);
+			}
+			
 
 
 		}

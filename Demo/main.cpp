@@ -103,9 +103,17 @@ int frames = 100000;
 
 //sphere properties
 bool show_sphere = true;
-float sphere_scale = 0.2;
+float sphere_scale = 0.4;
 
 
+//gaze behavior unit
+glm::vec4 spherePositions[5];
+glm::vec4 pupilPositions[5];
+glm::vec4 gazeEnds[5];
+//std::vector<glm::vec4> spherePositions;
+//std::vector<glm::vec4> pupilPositions;
+//std::vector<glm::vec4> gazeEnds;
+//std::vector<glm::vec4> eyeVectors;
 
 void Gui() {
 	// Start the Dear ImGui frame
@@ -729,12 +737,12 @@ int main()
 				eyeAngle = glm::rotate(eyeAngle, -glm::radians(eye_angles[i][frame].x), glm::vec3(0.0f, 1.0f, 0.0f));
 
 				//scale of eye gaze line
-				glm::mat4 scaleonly = glm::mat4(1.0f);
-				scaleonly = glm::scale(scaleonly, glm::vec3(character_scale * 0.5));
+				glm::mat4 scaleonly = glm::scale(glm::mat4(1.0f), glm::vec3(character_scale * 0.5));
 
 				//eye position relate to head center
-				glm::mat4 eyeoffset = glm::mat4(1.0f);
-				eyeoffset = glm::translate(eyeoffset, glm::vec3(0.0f, 0.0f, eye_front));
+				glm::mat4 eyeoffset = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, eye_front));
+
+
 
 				eyeShader.setMat4("eye_angle", eyeAngle);
 				//eyeShader.setMat4("hipsMatrix", myBone[i][0]->get_all_rotation()[frame]); //hips rotaion
@@ -750,8 +758,12 @@ int main()
 				glLineWidth(5);
 				glBindVertexArray(lineZVAO);
 				glDrawArrays(GL_LINES, 0, 2);
+				pupilPositions[i] = model_eye_angle * hipRotation * spineRotation * 
+					myBone[i][10]->get_all_rotation()[frame] * eyeoffset * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+				gazeEnds[i] = model_eye_angle * hipRotation * spineRotation *
+					myBone[i][10]->get_all_rotation()[frame] * eyeoffset * eyeAngle * glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
 			}
-			
+
 
 			//draw sphere around head
 			if (show_sphere)
@@ -763,17 +775,31 @@ int main()
 				normalShader.setMat4("projection", projection);
 				normalShader.setMat4("view", view);
 				normalShader.setMat4("model", sphere_model);
-				normalShader.setVec4("color", glm::vec4(0.0f,0.0f,0.0f,1.0f)); //black
+				normalShader.setVec4("color", glm::vec4(0.87f,0.67f,0.41f,0.5f)); //black
 				sphere.Draw(normalShader);
+				spherePositions[i] = sphere_model * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 			}
 			
 
-
 		}
 
-	
+		
+		//cout << "p1 pupilposition: " << glm::to_string(pupilPositions[0]) << ", gazeEnds: " << glm::to_string(gazeEnds[0]) << endl;
+		//cout << "p2 headposition: " << glm::to_string(spherePositions[1]) << endl;
 
+		//p2 relate to p1
+		auto U = glm::normalize(glm::vec3(gazeEnds[0] - pupilPositions[0]));
 
+		auto Q = glm::vec3(pupilPositions[0] - spherePositions[1]);
+		auto b = 2.0f * glm::dot(U,Q);
+		auto c = glm::dot(Q, Q) - sphere_scale * sphere_scale;
+		auto d = b * b - 4.0f * c;
+
+		cout << d << ", ";
+		if (d >= 0)
+			cout << "Looking!!" << endl;
+		else
+			cout << "Not looking" << endl;
 		
 
 		//eyeAngle = glm::mat4(1.0f);

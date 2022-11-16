@@ -440,7 +440,7 @@ int main()
 		myBone[i].push_back((&animations[i])->FindBone("RightForeArm")); myBone[i].push_back((&animations[i])->FindBone("RightHand"));
 
 		//loading joints
-		ifstream file = ifstream("Session_" + to_string(session) + "_PC_" + to_string(i+1) + "_mocap_data.txt");
+		ifstream file = ifstream("../Conversation/Session_" + to_string(session) + "_PC_" + to_string(i+1) + "_mocap_data.txt");
 		string str;
 		cout << "Loading pc " << i+1 << endl;
 		int k = 0;
@@ -544,7 +544,7 @@ int main()
 			position_scale));
 
 		//loading eye gaze
-		file = ifstream("Session_" + to_string(session) + "_PC_" + to_string(i + 1) + "_EyeTracker_data.txt");
+		file = ifstream("../Conversation/Session_" + to_string(session) + "_PC_" + to_string(i + 1) + "_EyeTracker_data.txt");
 		str.clear();
 		string delimiter = " ";
 		vector<eye_angle> angle_temps;

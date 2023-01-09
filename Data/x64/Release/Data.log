@@ -3,10 +3,10 @@ d:\conversation_demo\data\main.cpp(19): warning C4305: 'initializing': truncatio
 d:\conversation_demo\data\main.cpp(41): warning C4305: 'initializing': truncation from 'double' to 'float'
 d:\conversation_demo\data\main.cpp(42): warning C4305: 'initializing': truncation from 'double' to 'float'
 d:\conversation_demo\data\main.cpp(44): warning C4305: 'initializing': truncation from 'double' to 'float'
-d:\conversation_demo\data\main.cpp(140): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+d:\conversation_demo\data\main.cpp(145): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
   Generating code
-  2 of 565 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
+  1 of 571 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+    15 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Data.vcxproj -> D:\Conversation_Demo\x64\Release\Data.exe

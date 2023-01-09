@@ -1,4 +1,12 @@
-﻿  main.cpp
+﻿  glad.c
+  imgui.cpp
+  imgui_demo.cpp
+  imgui_draw.cpp
+  imgui_impl_glfw.cpp
+  imgui_impl_opengl3.cpp
+  imgui_tables.cpp
+  imgui_widgets.cpp
+  main.cpp
 d:\conversation_demo\libraries\includes\shader.h(56): warning C4101: 'e': unreferenced local variable
 d:\conversation_demo\libraries\includes\bone.h(53): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 d:\conversation_demo\libraries\includes\bone.h(64): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
@@ -29,8 +37,9 @@ d:\conversation_demo\demo\main.cpp(927): warning C4244: '=': conversion from 'do
 d:\conversation_demo\demo\main.cpp(928): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 d:\conversation_demo\demo\main.cpp(937): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   Generating code
-  1 of 4153 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    4 functions had inline decision re-evaluated but remain unchanged
+d:\conversation_demo\libraries\includes\bone.h(154): warning C4715: 'Bone::GetScaleIndex': not all control paths return a value
+  1953 of 4153 functions (47.0%) were compiled, the rest were copied from previous compilation.
+    7 functions were new in current compilation
+    25 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Demo.vcxproj -> D:\Conversation_Demo\x64\Release\Demo.exe

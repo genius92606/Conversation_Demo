@@ -14,7 +14,7 @@
 #include <vector>
 #include <string>
 
-int session = 1;
+int session;
 int num_of_people = 3;
 float sphere_scale = 0.4;
 
@@ -55,16 +55,21 @@ int frames = 100000;
 
 int main()
 {
+	string date;
+	cout<< "Please enter date of capturing: ";
+	cin >> date;
+	cout << "Please enter session number: ";
+	cin >> session;
 
-	ofstream gazeBehavior("gazeBehavior.txt");
+	ofstream gazeBehavior("../3people/" + date + "/Session_" + to_string(session) + "_gazeBehavior.txt");
 
 	// loading joints and eye-gaze angle
 	// ---------------------------------------------------------------------------
 	for (int i = 0; i < num_of_people; i++) {
 
 
-		//loading joints
-		ifstream file = ifstream("../Conversation/Session_" + to_string(session) + "_PC_" + to_string(i + 1) + "_mocap_data.txt");
+		//loading joints (Mocap file)
+		ifstream file = ifstream("../3people/" + date + "/Mocap/Seperate/" + "Session_" + to_string(session) + "_PC_" + to_string(i + 1) + "_mocap_data.txt");
 		string str;
 		cout << "Loading pc " << i + 1 << endl;
 		int k = 0;
@@ -139,10 +144,11 @@ int main()
 		if (allHipPositions[i].size() < frames)
 			frames = allHipPositions[i].size();
 
-		cout << allHipPositions[i].size();
+		//cout << allHipPositions[i].size();
 
 		//loading eye gaze
-		file = ifstream("../Conversation/Session_" + to_string(session) + "_PC_" + to_string(i + 1) + "_EyeTracker_data.txt");
+		//file = ifstream("../Conversation/Session_" + to_string(session) + "_PC_" + to_string(i + 1) + "_EyeTracker_data.txt");
+		file = ifstream("../3people/" + date + "/Gaze/Seperate/" + "Session_" + to_string(session) + "_PC_" + to_string(i + 1) + "_EyeTracker_data.txt");
 		str.clear();
 		string delimiter = " ";
 		vector<eye_angle> angle_temps;
@@ -161,10 +167,10 @@ int main()
 	}
 
 	cout << "Finsih loading all data and start calculating gaze behavior" << endl;
-	cout << "Frames: " << frames << endl;
+	//cout << "Frames: " << frames << endl;
 
 	
-
+	gazeBehavior << "P1 Gaze\tP2 Gaze\tP3 Gaze" << endl;
 
 	for (int frame = 0;  frame < frames; frame++)
 	{
@@ -217,18 +223,32 @@ int main()
 			auto d2 = b * b - 4.0f * c;
 
 			//cout << "p" << i << " gaze behavior: ";
-			string gb = "nothing";
-			if (d1 >= 0)
-				gb = "looking left";
-			if (d2 >= 0)
-				gb = "looking right";
 
-			string final = "p" + to_string(i) + " gaze behavior: " + gb;
-			gazeBehavior << final <<", ";
+		
+			int look = 0;
+			string gb = "nothing";
+			if (d1 >= 0) {
+				gb = "looking left";
+				look = 1;
+			}
+
+			if (d2 >= 0) {
+				gb = "looking right";
+				look = 2;
+			}
+				
+
+			//string final = "p" + to_string(i) + " gaze behavior: " + gb;
+			//gazeBehavior << final <<", ";
+			if (i < 2)
+				gazeBehavior << look << "\t";
+			else
+				gazeBehavior << look;
 		}
 		gazeBehavior << endl;
 	}
 	gazeBehavior.close();
+	cout << "Finsih calculating gaze behavior" << endl;
 
 	return 0;
 }

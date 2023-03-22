@@ -440,7 +440,9 @@ int main()
 		myBone[i].push_back((&animations[i])->FindBone("RightForeArm")); myBone[i].push_back((&animations[i])->FindBone("RightHand"));
 
 		//loading joints
-		ifstream file = ifstream("../Conversation/Session_" + to_string(session) + "_PC_" + to_string(i+1) + "_mocap_data.txt");
+		//ifstream file = ifstream("../Conversation/4People/05-07-2022/Session_" + to_string(session) + "_PC_" + to_string(i+1) + "_mocap_data.txt");
+		ifstream file = ifstream("../Conversation/Session_" + to_string(session) + "_PC_" + to_string(i + 1) + "_mocap_data.txt");
+
 		string str;
 		cout << "Loading pc " << i+1 << endl;
 		int k = 0;
@@ -461,39 +463,32 @@ int main()
 				//Setup rotation for each joint based on different orientation
 
 				//if (k % 2 == 0) { //cause orignial file is 60hz, I reduce it to 30hz
-					glm::mat4 bbb; bbb = glm::mat4(1.0f);
-					glm::mat4 ttt; ttt = glm::mat4(1.0f);
+				glm::quat myQuat;
+					//glm::mat4 bbb; bbb = glm::mat4(1.0f);
 					if (j == 0)
 					{
 
-						bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
+						/*bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
 						bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
-						bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
+						bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));*/
+						
+						myQuat = glm::quat(glm::vec3(glm::radians(y), glm::radians(z), glm::radians(x)));
 					}
 					else if (j == 12) //left arm
 					{
-						bbb = glm::rotate(bbb, glm::radians(x - 90), glm::vec3(0, 0, 1));
-						bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
-						bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
+						myQuat = glm::quat(glm::vec3(glm::radians(0.0), glm::radians(0.0), glm::radians(-90.0)));
+						myQuat = glm::quat(glm::vec3(glm::radians(y), glm::radians(z), glm::radians(x))) *myQuat;
 					}
+						
 					else if (j == 13) //left forearm
-					{
-						bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
-						bbb = glm::rotate(bbb, glm::radians(y+25), glm::vec3(1, 0, 0));
-						bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
-					}
+						myQuat = glm::quat(glm::vec3(glm::radians(y), glm::radians(z), glm::radians(x)));
 					else if (j == 16) //right arm
 					{
-						bbb = glm::rotate(bbb, glm::radians(x + 90.f), glm::vec3(0, 0, 1));
-						bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
-						bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
+						myQuat = glm::quat(glm::vec3(glm::radians(0.0), glm::radians(0.0), glm::radians(90.0)));
+						myQuat = glm::quat(glm::vec3(glm::radians(y), glm::radians(z), glm::radians(x))) * myQuat;
 					}
 					else if (j == 17) //right forearm
-					{
-						bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
-						bbb = glm::rotate(bbb, glm::radians(y+25), glm::vec3(1, 0, 0));
-						bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
-					}
+						myQuat = glm::quat(glm::vec3(glm::radians(y), glm::radians(z), glm::radians(x)));
 					else if (j == 19) //hip position
 					{
 						if (k == 0)
@@ -517,15 +512,12 @@ int main()
 
 					}
 					else
-					{
-						bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
-						bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
-						bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
-					}
+						myQuat = glm::quat(glm::vec3(glm::radians(y), glm::radians(z), glm::radians(x)));
 
 					if (j < 19)
 					{
-						myBone[i][j]->setRotation(bbb);
+						//myBone[i][j]->setRotation(bbb);
+						myBone[i][j]->setRotation(glm::toMat4(myQuat));
 						//newBone[j]->setPosition(glm::vec3(0, 0, 0));
 						//cout << newBone[j]->GetBoneName() << ", x:" << x << ", y:" << y << ", z:" << z << endl;
 					}
@@ -544,7 +536,9 @@ int main()
 			position_scale));
 
 		//loading eye gaze
+		//file = ifstream("../Conversation/4People/05-07-2022/Session_" + to_string(session) + "_PC_" + to_string(i + 1) + "_EyeTracker_data.txt");
 		file = ifstream("../Conversation/Session_" + to_string(session) + "_PC_" + to_string(i + 1) + "_EyeTracker_data.txt");
+
 		str.clear();
 		string delimiter = " ";
 		vector<eye_angle> angle_temps;
@@ -562,43 +556,43 @@ int main()
 
 	}
 	
-
-	auto yyy = (&animations[0])->GetBoneIDMap();
-	
-	cout << "head id: " << yyy["Head"].id << ", offset:" << glm::to_string(yyy["Head"].offset) << endl;
-	cout << "spine id:" << yyy["Spine1"].id << ", offset:" << glm::to_string(yyy["Spine1"].offset) << endl;
-	cout << "hips id:" << yyy["Hips"].id << ", offset:"<< glm::to_string(yyy["Hips"].offset) << endl;
-
-
-	for (int i = 0; i < (&animations[0])->getBones().size(); i++)
-		cout << (&animations[0])->getBones()[i].GetBoneName() << endl;
-
-	auto dfs = (&animations[0])->getBones()[6].get_scales();
-	cout << "get scales: " << glm::to_string(dfs) << endl;
-
-	glm::mat4 temp = glm::mat4(1.0f);
-	temp = glm::scale(temp, glm::vec3(character_scale * 50));
-
-	cout << "scale: " << glm::to_string(temp) << endl;
+	//
+	//auto yyy = (&animations[0])->GetBoneIDMap();
+	//
+	//cout << "head id: " << yyy["Head"].id << ", offset:" << glm::to_string(yyy["Head"].offset) << endl;
+	//cout << "spine id:" << yyy["Spine1"].id << ", offset:" << glm::to_string(yyy["Spine1"].offset) << endl;
+	//cout << "hips id:" << yyy["Hips"].id << ", offset:"<< glm::to_string(yyy["Hips"].offset) << endl;
 
 
-	auto see_mesh = model.meshes;
-	cout << "mesh size of model:" << see_mesh.size() << endl;
-	auto see_vertices = see_mesh[4].vertices;
-	cout << "vertices size for each mesh:" << see_vertices.size() << endl;
-	auto see_vertex = see_vertices[0];
-	cout << "Position: " << glm::to_string(see_vertex.Position) << endl;
-	cout << "bone ids: " << endl;
-	std::copy(std::begin(see_vertex.m_BoneIDs),
-		std::end(see_vertex.m_BoneIDs),
-		std::ostream_iterator<int>(std::cout, "\n"));
-	cout << "weights: "  << endl;
-	std::copy(std::begin(see_vertex.m_Weights),
-		std::end(see_vertex.m_Weights),
-		std::ostream_iterator<float>(std::cout, "\n"));
+	//for (int i = 0; i < (&animations[0])->getBones().size(); i++)
+	//	cout << (&animations[0])->getBones()[i].GetBoneName() << endl;
 
-	//print out the initial head position of model (not related to our animation)
-	cout << "head position:" << glm::to_string(myBone[0][10]->getposition()[0].position) << endl;
+	//auto dfs = (&animations[0])->getBones()[6].get_scales();
+	//cout << "get scales: " << glm::to_string(dfs) << endl;
+
+	//glm::mat4 temp = glm::mat4(1.0f);
+	//temp = glm::scale(temp, glm::vec3(character_scale * 50));
+
+	//cout << "scale: " << glm::to_string(temp) << endl;
+
+
+	//auto see_mesh = model.meshes;
+	//cout << "mesh size of model:" << see_mesh.size() << endl;
+	//auto see_vertices = see_mesh[4].vertices;
+	//cout << "vertices size for each mesh:" << see_vertices.size() << endl;
+	//auto see_vertex = see_vertices[0];
+	//cout << "Position: " << glm::to_string(see_vertex.Position) << endl;
+	//cout << "bone ids: " << endl;
+	//std::copy(std::begin(see_vertex.m_BoneIDs),
+	//	std::end(see_vertex.m_BoneIDs),
+	//	std::ostream_iterator<int>(std::cout, "\n"));
+	//cout << "weights: "  << endl;
+	//std::copy(std::begin(see_vertex.m_Weights),
+	//	std::end(see_vertex.m_Weights),
+	//	std::ostream_iterator<float>(std::cout, "\n"));
+
+	////print out the initial head position of model (not related to our animation)
+	//cout << "head position:" << glm::to_string(myBone[0][10]->getposition()[0].position) << endl;
 
 	// render loop
 	// -----------
@@ -621,7 +615,6 @@ int main()
 
 			animators[i].UpdateAnimation(frame);
 		}
-
 
 
 		// render

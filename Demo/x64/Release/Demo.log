@@ -1,51 +1,6 @@
-﻿  glad.c
-  imgui.cpp
-  imgui_demo.cpp
-  imgui_draw.cpp
-  imgui_impl_glfw.cpp
-  imgui_impl_opengl3.cpp
-  imgui_tables.cpp
-  imgui_widgets.cpp
-  main.cpp
-d:\conversation_demo\libraries\includes\shader.h(56): warning C4101: 'e': unreferenced local variable
-d:\conversation_demo\libraries\includes\bone.h(53): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\libraries\includes\bone.h(64): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\libraries\includes\bone.h(75): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\libraries\includes\bone.h(182): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-d:\conversation_demo\libraries\includes\mesh.h(93): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-d:\conversation_demo\libraries\includes\model_animation.h(184): warning C4018: '<': signed/unsigned mismatch
-d:\conversation_demo\libraries\includes\animation.h(31): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\libraries\includes\animation.h(32): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-d:\conversation_demo\libraries\includes\animation.h(56): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
-d:\conversation_demo\libraries\includes\animation.h(99): warning C4018: '<': signed/unsigned mismatch
-d:\conversation_demo\demo\main.cpp(60): warning C4305: 'initializing': truncation from 'double' to 'float'
-d:\conversation_demo\demo\main.cpp(72): warning C4305: 'initializing': truncation from 'double' to 'float'
-d:\conversation_demo\demo\main.cpp(73): warning C4305: 'initializing': truncation from 'double' to 'float'
-d:\conversation_demo\demo\main.cpp(89): warning C4305: 'initializing': truncation from 'double' to 'float'
-d:\conversation_demo\demo\main.cpp(106): warning C4305: 'initializing': truncation from 'double' to 'float'
-d:\conversation_demo\demo\main.cpp(606): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(733): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-d:\conversation_demo\demo\main.cpp(912): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(913): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(917): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(918): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(920): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(921): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(930): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  Generating code
-<<<<<<< HEAD
-  3 of 4102 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    4 functions had inline decision re-evaluated but remain unchanged
-=======
-d:\conversation_demo\libraries\includes\bone.h(154): warning C4715: 'Bone::GetScaleIndex': not all control paths return a value
-  1953 of 4153 functions (47.0%) were compiled, the rest were copied from previous compilation.
+﻿  Generating code
+  46 of 4102 functions ( 1.1%) were compiled, the rest were copied from previous compilation.
     7 functions were new in current compilation
-    25 functions had inline decision re-evaluated but remain unchanged
->>>>>>> ef57a7dce8053d9f2e582afa03073d01787761f8
+    5 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Demo.vcxproj -> D:\Conversation_Demo\x64\Release\Demo.exe

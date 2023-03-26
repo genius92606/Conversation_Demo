@@ -69,7 +69,7 @@ int main()
 
 
 		//loading joints (Mocap file)
-		ifstream file = ifstream("../3people/" + date + "/Mocap/Seperate/" + "Session_" + to_string(session) + "_PC_" + to_string(i + 1) + "_mocap_data.txt");
+		ifstream file = ifstream("../3people/" + date + "/Mocap/Separate/" + "Session_" + to_string(session) + "_PC_" + to_string(i + 1) + "_mocap_data.txt");
 		string str;
 		cout << "Loading pc " << i + 1 << endl;
 		int k = 0;
@@ -147,8 +147,8 @@ int main()
 		//cout << allHipPositions[i].size();
 
 		//loading eye gaze
-		//file = ifstream("../Conversation/Session_" + to_string(session) + "_PC_" + to_string(i + 1) + "_EyeTracker_data.txt");
-		file = ifstream("../3people/" + date + "/Gaze/Seperate/" + "Session_" + to_string(session) + "_PC_" + to_string(i + 1) + "_EyeTracker_data.txt");
+		file = ifstream("../Conversation/Session_" + to_string(session) + "_PC_" + to_string(i + 1) + "_EyeTracker_data.txt");
+		//file = ifstream("../3people/" + date + "/Gaze/Convert/" + "Session_" + to_string(session) + "_PC_" + to_string(i + 1) + "_EyeTracker_data_gapfilled.txt");
 		str.clear();
 		string delimiter = " ";
 		vector<eye_angle> angle_temps;
@@ -249,6 +249,6 @@ int main()
 	}
 	gazeBehavior.close();
 	cout << "Finsih calculating gaze behavior" << endl;
-
+	system("pause");
 	return 0;
 }

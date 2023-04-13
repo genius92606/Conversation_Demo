@@ -187,7 +187,7 @@ int main()
 			hipRotation = glm::translate(hipRotation, allSpinePositions[i][frame] / position_scale);
 
 			//head rotation relate to spine
-			glm::mat4 spineRotation = allHeadRotations[i][frame];
+			glm::mat4 spineRotation = allSpineRotations[i][frame];
 			spineRotation = glm::translate(spineRotation, allHeadPositions[i][frame] / position_scale);
 
 			//raw eye gaze anagle

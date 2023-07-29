@@ -109,9 +109,9 @@ int main()
 				}
 				else if (j == 10) //head rotation
 				{
-					bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));
-					bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));
-					bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));
+					bbb = glm::rotate(bbb, glm::radians(x), glm::vec3(0, 0, 1));	//roll
+					bbb = glm::rotate(bbb, glm::radians(y), glm::vec3(1, 0, 0));	//pitch
+					bbb = glm::rotate(bbb, glm::radians(z), glm::vec3(0, 1, 0));    //yaw
 					allHeadRotations[i].push_back(bbb);
 				}
 				else if (j == 19) //hip position

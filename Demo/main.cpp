@@ -38,7 +38,9 @@ const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1080;
 
 // camera
-Camera camera(glm::vec3(0.868368f, 3.01393f, 3.93507f), glm::vec3(-0.173054f, 0.805921f, -0.566166f), -107.4f, -36.3f);
+//Camera camera(glm::vec3(0.868368f, 3.01393f, 3.93507f), glm::vec3(-0.173054f, 0.805921f, -0.566166f), -107.4f, -36.3f);
+
+Camera camera;
 
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
@@ -56,7 +58,7 @@ bool show_another_window = false;
 ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 //room properties
-static float roomPosition[3] = { -7.0f,-0.06f,6.0f };
+static float roomPosition[3] = { -13.8f,-0.06f,9.0f };
 float roomScale = 0.02;
 
 //axes properties
@@ -103,7 +105,10 @@ int frames = 100000;
 
 //sphere properties
 bool show_sphere = true;
-float sphere_scale = 0.4;
+float sphere_scale = 0.15;
+float sphere_alpha = 0.7;
+//glm::vec4 sphereColor = glm::vec4(0.87f, 0.67f, 0.41f, 0.5f);
+static float sphereColor[4] = { 0.87f,0.67f,0.41f,0.5f };
 
 
 //gaze behavior unit
@@ -148,6 +153,9 @@ void Gui() {
 		ImGui::SliderInt("frame", &frame, 0, frames-1);
 
 		ImGui::InputFloat("Sphere Scale", &sphere_scale);
+		//ImGui::InputFloat("Sphere Alpha", &sphere_alpha);
+		ImGui::InputFloat4("Sphere Color", sphereColor);
+		
 		//ImGui::Text("counter = %d", frame);
 
 
@@ -197,7 +205,7 @@ int main()
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	// comment if you don't want the cursor movement
-	//glfwSetCursorPosCallback(window, mouse_callback);
+	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 
 
@@ -282,6 +290,7 @@ int main()
 
 
 	Model room("../Resources/big-room/Room.obj");
+	//Model room("../Resources/room/room.obj");
 	Model sphere("../Resources/sphere/sphere.obj");
 
 	//cout << "finish loading all object and animation" << endl;
@@ -596,6 +605,10 @@ int main()
 
 	// render loop
 	// -----------
+
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+
 	while (!glfwWindowShouldClose(window))
 	{
 
@@ -677,7 +690,7 @@ int main()
 		normalShader.setMat4("model", model_axis);
 
 		
-
+		
 		//////Draw People//////
 		
 		for (int i = 0; i < num_of_people; i++) {
@@ -761,6 +774,7 @@ int main()
 			//draw sphere around head
 			if (show_sphere)
 			{
+				
 				glm::mat4 sphere_model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, head_front));
 				sphere_model = glm::scale(sphere_model, glm::vec3(sphere_scale));
 				sphere_model = model_eye_angle * hipRotation * spineRotation* sphere_model;
@@ -768,9 +782,10 @@ int main()
 				normalShader.setMat4("projection", projection);
 				normalShader.setMat4("view", view);
 				normalShader.setMat4("model", sphere_model);
-				normalShader.setVec4("color", glm::vec4(0.87f,0.67f,0.41f,0.5f)); //black
+				normalShader.setVec4("color", glm::vec4(sphereColor[0], sphereColor[1], sphereColor[2], sphereColor[3]));
 				sphere.Draw(normalShader);
 				spherePositions[i] = sphere_model * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	//			glDisable(GL_BLEND);
 			}
 			
 

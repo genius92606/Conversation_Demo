@@ -1,23 +1,33 @@
 ﻿  main.cpp
-d:\conversation_demo\libraries\includes\shader.h(56): warning C4101: 'e': unreferenced local variable
-d:\conversation_demo\libraries\includes\bone.h(47): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\libraries\includes\bone.h(58): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\libraries\includes\bone.h(69): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\libraries\includes\mesh.h(93): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-d:\conversation_demo\libraries\includes\model_animation.h(184): warning C4018: '<': signed/unsigned mismatch
-d:\conversation_demo\libraries\includes\animation.h(31): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\libraries\includes\animation.h(32): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-d:\conversation_demo\libraries\includes\animation.h(56): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
-d:\conversation_demo\libraries\includes\animation.h(99): warning C4018: '<': signed/unsigned mismatch
-d:\conversation_demo\demo\main.cpp(61): warning C4305: 'initializing': truncation from 'double' to 'float'
-d:\conversation_demo\demo\main.cpp(73): warning C4305: 'initializing': truncation from 'double' to 'float'
-d:\conversation_demo\demo\main.cpp(860): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(1137): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(1138): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(1142): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(1143): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(1145): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(1146): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(1155): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\libraries\includes\bone.h(172): warning C4715: 'Bone::GetScaleIndex': not all control paths return a value
+D:\Conversation_Demo\Libraries\Includes\shader.h(56,34): warning C4101: 'e': unreferenced local variable
+D:\Conversation_Demo\Libraries\Includes\bone.h(53,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\Conversation_Demo\Libraries\Includes\bone.h(64,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\Conversation_Demo\Libraries\Includes\bone.h(75,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\Conversation_Demo\Libraries\Includes\bone.h(182,29): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+D:\Conversation_Demo\Libraries\Includes\mesh.h(93,44): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+D:\Conversation_Demo\Libraries\Includes\model_animation.h(184,37): warning C4018: '<': signed/unsigned mismatch
+D:\Conversation_Demo\Libraries\Includes\animation.h(31,25): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\Conversation_Demo\Libraries\Includes\animation.h(32,31): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+D:\Conversation_Demo\Libraries\Includes\animation.h(56,44): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+D:\Conversation_Demo\Libraries\Includes\animation.h(99,21): warning C4018: '<': signed/unsigned mismatch
+D:\Conversation_Demo\Demo\main.cpp(62,17): warning C4305: 'initializing': truncation from 'double' to 'float'
+D:\Conversation_Demo\Demo\main.cpp(74,18): warning C4305: 'initializing': truncation from 'double' to 'float'
+D:\Conversation_Demo\Demo\main.cpp(75,17): warning C4305: 'initializing': truncation from 'double' to 'float'
+D:\Conversation_Demo\Demo\main.cpp(91,18): warning C4305: 'initializing': truncation from 'double' to 'float'
+D:\Conversation_Demo\Demo\main.cpp(108,20): warning C4305: 'initializing': truncation from 'double' to 'float'
+D:\Conversation_Demo\Demo\main.cpp(109,20): warning C4305: 'initializing': truncation from 'double' to 'float'
+D:\Conversation_Demo\Demo\main.cpp(619,22): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\Conversation_Demo\Demo\main.cpp(746,81): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+D:\Conversation_Demo\Demo\main.cpp(927,11): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\Conversation_Demo\Demo\main.cpp(928,11): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\Conversation_Demo\Demo\main.cpp(932,16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\Conversation_Demo\Demo\main.cpp(933,16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\Conversation_Demo\Demo\main.cpp(935,10): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\Conversation_Demo\Demo\main.cpp(936,10): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\Conversation_Demo\Demo\main.cpp(945,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\Conversation_Demo\Libraries\Includes\bone.h(154): warning C4715: 'Bone::GetScaleIndex': not all control paths return a value
   Demo.vcxproj -> D:\Conversation_Demo\x64\Debug\Demo.exe

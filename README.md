@@ -5,7 +5,7 @@ An application written in OpenGL capable of capturing and interpreting motion da
 
 
 ## Environment
-Windows 10 or 11, Visual Studio 2015, 2017 or 2019
+Windows 10 or 11, Visual Studio 2015, 2017, 2019 or 2022.
 
 ## Installation
 

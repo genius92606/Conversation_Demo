@@ -19,5 +19,5 @@ Click on Demo.sln and start the project.
 ![](Snapshot/With-Sphere.png)
 
 
-<img src="Snapshot/With-Sphere.png" alt="drawing" width="200"/>
-<img src="Snapshot/no-sphere.png" alt="drawing" width="200"/>
+<img src="Snapshot/With-Sphere.png" alt="drawing" width="600"/>
+<img src="Snapshot/no-shpere.png" alt="drawing" width="600"/>

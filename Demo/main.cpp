@@ -93,7 +93,7 @@ float head_front = 0.1;
 vector<float> height_scale;
 
 int session = 1;
-int num_of_people = 3;
+int num_of_people = 2;
 float character_scale = 1;
 
 using namespace std;

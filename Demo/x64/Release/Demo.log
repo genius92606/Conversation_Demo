@@ -17,21 +17,21 @@ d:\conversation_demo\demo\main.cpp(91): warning C4305: 'initializing': truncatio
 d:\conversation_demo\demo\main.cpp(108): warning C4305: 'initializing': truncation from 'double' to 'float'
 d:\conversation_demo\demo\main.cpp(109): warning C4305: 'initializing': truncation from 'double' to 'float'
 d:\conversation_demo\demo\main.cpp(619): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(746): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+d:\conversation_demo\demo\main.cpp(751): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
           ]
-d:\conversation_demo\demo\main.cpp(927): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(928): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(932): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(933): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(935): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(936): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\conversation_demo\demo\main.cpp(945): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\demo\main.cpp(932): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\demo\main.cpp(933): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\demo\main.cpp(937): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\demo\main.cpp(938): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\demo\main.cpp(940): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\demo\main.cpp(941): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\conversation_demo\demo\main.cpp(950): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   Generating code
-  3 of 4104 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  1 of 4104 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    4 functions had inline decision re-evaluated but remain unchanged
+    6 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Demo.vcxproj -> D:\Conversation_Demo\x64\Release\Demo.exe

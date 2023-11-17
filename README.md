@@ -16,8 +16,7 @@ git clone https://github.com/genius92606/Conversation_Demo.git
 Click on Demo.sln and start the project.
 
 # Screenshot
-<img src="Snapshot/no-shpere.png" alt="drawing" width="600"/>
-<img src="Snapshot/With-Sphere.png" alt="drawing" width="400"/>
+
 <p float="left">
   <img src="Snapshot/no-shpere.png" width="600" />
   <img src="Snapshot/With-Sphere.png" width="400" /> 
